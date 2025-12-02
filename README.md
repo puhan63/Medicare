@@ -2,8 +2,11 @@ The Centers for Medicare & Medicaid Services (CMS) provides detailed data on pre
 
 This project focuses on performing a comprehensive analysis of these data to identify meaningful patterns and insights related to medication utilization and prescription claims among Medicare recipients. The goal is to synthesize the information into actionable findings that enhance understanding of prescribing trends, cost dynamics, and opioid-related behaviors within the Medicare system.
 
-Trend Analysis:
+**Trend Analysis:**
 Conducted a year-over-year assessment of overall prescription drug claims and opioid-related claims to identify patterns, shifts, and emerging trends in medication utilization.
 
-Demographic Impact Assessment:
+**Demographic Impact Assessment:**
 Analyzed annual variations in prescriber counts, opioid prescriber counts, and total drug costs to understand their influence on prescribing behavior and overall claims activity.
+
+**Performance Analysis:**
+Assessed the correlations between drug cost, prescriber counts, opioid prescriber counts, and both overall and opioid-related claims to determine the strength and direction of these relationships and their impact on prescribing outcomes.
