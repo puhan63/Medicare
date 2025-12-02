@@ -1,3 +1,5 @@
+# Medicare
+
 The Centers for Medicare & Medicaid Services (CMS) provides detailed data on prescription drugs dispensed to Medicare Part D beneficiaries. This dataset includes key information such as prescriber National Provider Identifiers (NPIs), total drug costs, brand and generic drug names, and geographic variations in prescribing behavior. Notably, the dataset also captures opioid prescribing rates at the regional level.
 
 This project focuses on performing a comprehensive analysis of these data to identify meaningful patterns and insights related to medication utilization and prescription claims among Medicare recipients. The goal is to synthesize the information into actionable findings that enhance understanding of prescribing trends, cost dynamics, and opioid-related behaviors within the Medicare system.
@@ -10,3 +12,11 @@ Analyzed annual variations in prescriber counts, opioid prescriber counts, and t
 
 **Performance Analysis:**
 Assessed the correlations between drug cost, prescriber counts, opioid prescriber counts, and both overall and opioid-related claims to determine the strength and direction of these relationships and their impact on prescribing outcomes.
+
+An Interactive Tableau dashboard can be downloaded [here]().
+
+**DATA STRUCTURE & INITIAL CHECKS**
+
+**Data Cleaning and Preparation**
+
+The initial dataset contained over 1,048,570 traffic violation records and underwent a series of quality control and preparatory steps before analysis. After cleaning, the final dataset comprised 295,569 records. All operations were performed using the SQL programming language. The SQL queries used for these inspections are available [here](https://github.com/puhan63/Traffic-Violations/blob/main/Traffic_Violations_Documented_Queries.sql).
