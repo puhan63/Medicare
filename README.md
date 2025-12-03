@@ -19,4 +19,14 @@ An Interactive Tableau dashboard can be downloaded [here]().
 
 **Data Cleaning and Preparation**
 
-The initial dataset contained over 1,048,570 traffic violation records and underwent a series of quality control and preparatory steps before analysis. After cleaning, the final dataset comprised 295,569 records. All operations were performed using the SQL programming language. The SQL queries used for these inspections are available [here](https://github.com/puhan63/Traffic-Violations/blob/main/Traffic_Violations_Documented_Queries.sql).
+The initial data source consisted of three Medicare Part D tables:
+
+Medicare Part D Prescribers – by Provider and Drug
+
+Medicare Part D Prescribers – by Geography and Drug
+
+Medicare Part D Opioid Prescribing Rates – by Geography
+
+The Prescribers – by Provider and Drug table contained 1,048,576 records. The Prescribers – by Geography and Drug table contained 115,937 records, and the Opioid Prescribing Rates – by Geography table contained 328,891 records.
+
+Prior to analysis, the datasets underwent a full data-quality and preprocessing workflow, including cleaning, standardization, and preparation for merging. After these procedures were completed, the integrated dataset contained 1,132,560 records. All data processing and analysis were conducted using SQL. The SQL queries used for these inspections are available [here]().
