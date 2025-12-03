@@ -21,12 +21,22 @@ An Interactive Tableau dashboard can be downloaded [here]().
 
 The initial data source consisted of three Medicare Part D tables:
 
-Medicare Part D Prescribers – by Provider and Drug
+**Medicare Part D Prescribers – by Provider and Drug**
 
-Medicare Part D Prescribers – by Geography and Drug
+**Medicare Part D Prescribers – by Geography and Drug**
 
-Medicare Part D Opioid Prescribing Rates – by Geography
+**Medicare Part D Opioid Prescribing Rates – by Geography**
 
-The Prescribers – by Provider and Drug table contained 1,048,576 records. The Prescribers – by Geography and Drug table contained 115,937 records, and the Opioid Prescribing Rates – by Geography table contained 328,891 records.
+*The Prescribers – by Provider and Drug* table contained 1,048,576 records. *The Prescribers – by Geography and Drug* table contained 115,937 records, and the *Opioid Prescribing Rates – by Geography* table contained 328,891 records.
 
 Prior to analysis, the datasets underwent a full data-quality and preprocessing workflow, including cleaning, standardization, and preparation for merging. After these procedures were completed, the integrated dataset contained 1,132,560 records. All data processing and analysis were conducted using SQL. The SQL queries used for these inspections are available [here]().
+
+Initial Data Integrity and Quality Control
+
+Missing Values and Skewness: An initial assessment revealed most variables had an approximately normal distribution, while Search_Conducted and Search_Outcome required transformation due to their binary nature.
+
+Handling Incomplete Records: Missing data was determined to be structured rather than random. Consequently, any row missing information from several critical columns—specifically Search_Conducted and Search_Outcome, which were central to the analysis objectives—was removed from the dataset which consisted of 297,426 rows.
+
+Duplicate Records: Duplicate records were identified using a staging table methodology. A total of 455,575 redundant rows were subsequently deleted to ensure data integrity for analysis.
+
+Irrelevant Data: To streamline the dataset and improve processing efficiency, columns that were not relevant to the analysis objectives were removed. Columns with systematically missing data were also excluded.
