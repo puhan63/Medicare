@@ -31,9 +31,10 @@ The initial data source consisted of three Medicare Part D tables:
 
 Prior to analysis, the datasets underwent a full data-quality and preprocessing workflow, including cleaning, standardization, and preparation for merging. After these procedures were completed, the integrated dataset contained 1,132,560 records. All data processing and analysis were conducted using SQL. The SQL queries used for these inspections are available [here]().
 
-Initial Data Integrity and Quality Control
+**Initial Data Integrity and Quality Control**
 
-Missing Values and Skewness: An initial assessment revealed most variables had an approximately normal distribution, while Search_Conducted and Search_Outcome required transformation due to their binary nature.
+**Missing Values and Skewness:**
+An initial assessment indicated that most variables exhibited either positive or negative skewness, as well as kurtosis. Key variables of interest—including Tot_Clms, Tot_Drug_Cst, Tot_Prscrb, Tot_Opioid_Prscrb, and Tot_Opioid_Clms—demonstrated positive skewness and elevated kurtosis. Skewness and kurtosis were calculated in Excel due to its ease of use. The corresponding values are provided in the referenced table. Because Spearman’s rank correlation coefficient is less sensitive to outliers, it was selected as the primary method for assessing bivariate associations.
 
 Handling Incomplete Records: Missing data was determined to be structured rather than random. Consequently, any row missing information from several critical columns—specifically Search_Conducted and Search_Outcome, which were central to the analysis objectives—was removed from the dataset which consisted of 297,426 rows.
 
