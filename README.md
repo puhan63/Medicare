@@ -39,6 +39,8 @@ An initial assessment indicated that most variables exhibited either positive or
 **Handling Incomplete Records:** 
 Missing data was determined to be structured rather than random. Consequently, any row missing information from several critical columns—Tot_Prscrbr, Tot_Opioid_Clms, and Tot_Opioid_Prscrbr, which were central to the analysis objectives—was removed from the dataset which consisted of 4,920 rows. 
 
-Duplicate Records: Duplicate records were identified using a staging table methodology. A total of 455,575 redundant rows were subsequently deleted to ensure data integrity for analysis.
+**Duplicate Records:**
+Duplicate records were evaluated using a staging-table methodology, and no duplicates were identified in any of the datasets.
 
-Irrelevant Data: To streamline the dataset and improve processing efficiency, columns that were not relevant to the analysis objectives were removed. Columns with systematically missing data were also excluded.
+**Irrelevant Data:**
+To optimize the dataset for analysis, fields that did not contribute to the defined analytical objectives were removed. Relevant tables were then joined to consolidate necessary information and ensure a streamlined, analysis-ready dataset.
