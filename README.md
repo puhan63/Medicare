@@ -36,7 +36,8 @@ Prior to analysis, the datasets underwent a full data-quality and preprocessing 
 **Missing Values and Skewness:**
 An initial assessment indicated that most variables exhibited either positive or negative skewness, as well as kurtosis. Key variables of interest—including Tot_Clms, Tot_Drug_Cst, Tot_Prscrb, Tot_Opioid_Prscrb, and Tot_Opioid_Clms—demonstrated positive skewness and elevated kurtosis. Skewness and kurtosis were calculated in Excel due to its ease of use. The corresponding values are provided in the referenced table. Because Spearman’s rank correlation coefficient is less sensitive to outliers, it was selected as the primary method for assessing bivariate associations.
 
-Handling Incomplete Records: Missing data was determined to be structured rather than random. Consequently, any row missing information from several critical columns—specifically Search_Conducted and Search_Outcome, which were central to the analysis objectives—was removed from the dataset which consisted of 297,426 rows.
+**Handling Incomplete Records:** 
+Missing data was determined to be structured rather than random. Consequently, any row missing information from several critical columns—Tot_Prscrbr, Tot_Opioid_Clms, and Tot_Opioid_Prscrbr, which were central to the analysis objectives—was removed from the dataset which consisted of 4,920 rows. 
 
 Duplicate Records: Duplicate records were identified using a staging table methodology. A total of 455,575 redundant rows were subsequently deleted to ensure data integrity for analysis.
 
