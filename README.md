@@ -49,7 +49,7 @@ To optimize the dataset for analysis, fields that did not contribute to the defi
 
 **OVERVIEW OF FINDINGS**
 
-Police searches peaked in 2013, while arrests reached their highest levels between 2015 and 2016. Searches occurred most frequently at night, followed by the afternoon and then the morning. Arrests showed the same pattern, with the highest numbers recorded at night, followed by the afternoon and morning.
+An analysis of claims, prescribing patterns, and drug costs over time reveals several clear trends. Overall claims increased steadily across the study period, with the fewest claims observed in 2013 and a peak in 2023. In contrast, opioid-related claims declined from 2016 through 2023, with the highest level occurring in 2016, indicating a sustained reduction in opioid claim volume in recent years. Drug costs remained stable throughout the period, showing no significant long-term fluctuations. Prescribing activity increased overall, as the total number of prescribers rose over time, again with the lowest count in 2013 and the highest in 2023. While the number of opioid prescribers showed a modest increase from 2016 to 2023, this change was not significant, and opioid prescriber counts remained relatively stable across the full 2013–2023 timeframe. Collectively, these findings suggest growth in overall utilization and provider participation, alongside stabilization in costs and a decline in opioid-specific claims.
 
 Below is part of the Tableau dashboard reflecting medicare claims and opioid prescribing patterns from 2013-2023. More examples are included throughout the report. The entire interactive dashboard can be downloaded
 
