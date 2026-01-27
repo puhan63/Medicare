@@ -44,3 +44,14 @@ Duplicate records were evaluated using a staging-table methodology, and no dupli
 
 **Irrelevant Data:**
 To optimize the dataset for analysis, fields that did not contribute to the defined analytical objectives were removed. Relevant tables were then joined to consolidate necessary information and ensure a streamlined, analysis-ready dataset.
+
+**EXECUTIVE SUMMARY**
+
+**OVERVIEW OF FINDINGS**
+
+Police searches peaked in 2013, while arrests reached their highest levels between 2015 and 2016. Searches occurred most frequently at night, followed by the afternoon and then the morning. Arrests showed the same pattern, with the highest numbers recorded at night, followed by the afternoon and morning.
+
+Below is part of the Tableau dashboard reflecting medicare claims and opioid prescribing patterns from 2013-2023. More examples are included throughout the report. The entire interactive dashboard can be downloaded
+
+overall claims increased over time with the most claims being in 2023 and the least in 2013. 
+opioid claims decreased from 2016-2023 with the highest being in 2016.
