@@ -55,9 +55,9 @@ Below is part of the Tableau dashboard reflecting medicare claims and opioid pre
 
 **ANALYSIS OF DEMOGRAPHICS**
 
-Prescriber Counts: The total number of prescribers increased over time, reaching its lowest level in 2013 and peaking in 2023. During this period, overall claims per prescriber rose steadily, indicating increased prescribing activity on a per-provider basis.
+Prescriber Counts: The total number of prescribers increased over time, reaching its lowest level in 2013 and peaking in 2023. During this period, overall claims per prescriber rose steadily, indicating increased prescribing activity on a per-provider basis, even as the share of opioid claims relative to overall claims declined from its highest level in 2014 to its lowest level in 2023.
 
-Opioid Prescriber Counts: The number of opioid prescribers experienced a slight increase between 2016 and 2023; however, this change was not substantial, and counts remained largely stable throughout the 2013–2023 period. In contrast, opioid claims per prescriber peaked in 2016 and declined thereafter, suggesting a reduction in opioid prescribing intensity per provider over time.
+Opioid Prescriber Counts: The number of opioid prescribers experienced a slight increase between 2016 and 2023; however, this change was not substantial, and counts remained largely stable throughout the 2013–2023 period. In contrast, opioid claims per prescriber peaked in 2016 and declined thereafter, suggesting a sustained reduction in opioid prescribing intensity per provider over time.
 
 Drug Cost: Drug costs remained largely stable over the study period, with no significant long-term fluctuations from 2013 to 2023. Costs also remained consistent when measured per NPI.
 
