@@ -55,8 +55,12 @@ Below is part of the Tableau dashboard reflecting medicare claims and opioid pre
 
 **ANALYSIS OF DEMOGRAPHICS**
 
-Prescriber Counts: The total number of prescribers increased over time, reaching its lowest level in 2013 and peaking in 2023.
+Prescriber Counts: The total number of prescribers increased over time, reaching its lowest level in 2013 and peaking in 2023. During this period, overall claims per prescriber rose steadily, indicating increased prescribing activity on a per-provider basis.
 
-Opioid Prescriber Counts: The number of opioid prescribers experienced a slight increase between 2016 and 2023; however, this change was not substantial, and counts remained largely stable throughout the 2013–2023 period.
+Opioid Prescriber Counts: The number of opioid prescribers experienced a slight increase between 2016 and 2023; however, this change was not substantial, and counts remained largely stable throughout the 2013–2023 period. In contrast, opioid claims per prescriber peaked in 2016 and declined thereafter, suggesting a reduction in opioid prescribing intensity per provider over time.
 
 Drug Cost: Drug costs remained largely stable over the study period, with no significant long-term fluctuations from 2013 to 2023. Costs also remained consistent when measured per NPI.
+
+**PERFORMANCE ANALYSIS**
+
+The analysis identified several positive correlations among key prescribing and claims measures. Overall claims were positively correlated with both the total number of prescribers and the number of opioid prescribers, indicating that increases in provider participation were associated with higher claim volumes. Overall claims were also positively correlated with opioid claims, suggesting that trends in total utilization moved in tandem with opioid-related utilization. In addition, opioid claims showed a positive relationship with the total number of prescribers, reflecting broader prescribing activity. A positive correlation was also observed between opioid prescribers and total prescribers, as well as between opioid prescribers and opioid claims, highlighting that changes in the number of opioid-prescribing providers were closely aligned with both overall provider counts and opioid-specific claim activity.
