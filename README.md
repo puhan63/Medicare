@@ -51,7 +51,12 @@ To optimize the dataset for analysis, fields that did not contribute to the defi
 
 An analysis of claims, prescribing patterns, and drug costs over time reveals several clear trends. Overall claims increased steadily across the study period, with the fewest claims observed in 2013 and a peak in 2023. In contrast, opioid-related claims declined from 2016 through 2023, with the highest level occurring in 2016, indicating a sustained reduction in opioid claim volume in recent years. Drug costs remained stable throughout the period, showing no significant long-term fluctuations. Prescribing activity increased overall, as the total number of prescribers rose over time, again with the lowest count in 2013 and the highest in 2023. While the number of opioid prescribers showed a modest increase from 2016 to 2023, this change was not significant, and opioid prescriber counts remained relatively stable across the full 2013–2023 timeframe. Collectively, these findings suggest growth in overall utilization and provider participation, alongside stabilization in costs and a decline in opioid-specific claims.
 
-Below is part of the Tableau dashboard reflecting medicare claims and opioid prescribing patterns from 2013-2023. More examples are included throughout the report. The entire interactive dashboard can be downloaded
+Below is part of the Tableau dashboard reflecting medicare claims and opioid prescribing patterns from 2013-2023. More examples are included throughout the report. The entire interactive dashboard can be downloaded here.
 
-overall claims increased over time with the most claims being in 2023 and the least in 2013. 
-opioid claims decreased from 2016-2023 with the highest being in 2016.
+**ANALYSIS OF DEMOGRAPHICS**
+
+Prescriber Counts: The total number of prescribers increased over time, reaching its lowest level in 2013 and peaking in 2023.
+
+Opioid Prescriber Counts: The number of opioid prescribers experienced a slight increase between 2016 and 2023; however, this change was not substantial, and counts remained largely stable throughout the 2013–2023 period.
+
+Drug Cost: Drug costs remained largely stable over the study period, with no significant long-term fluctuations from 2013 to 2023. Costs also remained consistent when measured per NPI.
