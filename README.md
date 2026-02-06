@@ -29,7 +29,7 @@ The initial data source consisted of three Medicare Part D tables:
 
 *The Prescribers – by Provider and Drug* table contained 1,048,576 records. *The Prescribers – by Geography and Drug* table contained 115,937 records, and the *Opioid Prescribing Rates – by Geography* table contained 328,891 records.
 
-Prior to analysis, the datasets underwent a full data-quality and preprocessing workflow, including cleaning, standardization, and preparation for merging. After these procedures were completed, the integrated dataset contained 1,132,560 records. All data processing and analysis were conducted using SQL. The SQL queries used for these inspections are available [here]().
+Prior to analysis, the datasets underwent a full data-quality and preprocessing workflow, including cleaning, standardization, and preparation for merging. After these procedures were completed, the integrated dataset contained 1,132,560 records. All data processing and analysis were conducted using SQL. The SQL queries used for these inspections are available [here](https://github.com/puhan63/Medicare/blob/main/Medicare_SQL_Updated_Queries.sql).
 
 **Initial Data Integrity and Quality Control**
 
