@@ -61,6 +61,8 @@ Opioid Prescriber Counts: The number of opioid prescribers experienced a slight 
 
 Drug Cost: Drug costs remained largely stable over the study period, with no significant long-term fluctuations from 2013 to 2023. Costs also remained consistent when measured per NPI.
 
+![image](https://github.com/puhan63/Medicare/blob/main/Medicare%20Image%201.png)
+
 **PERFORMANCE ANALYSIS**
 
 The analysis identified several positive correlations among key prescribing and claims measures. Overall claims were positively correlated with both the total number of prescribers and the number of opioid prescribers, indicating that increases in provider participation were associated with higher claim volumes. Overall claims were also positively correlated with opioid claims, suggesting that trends in total utilization moved in tandem with opioid-related utilization. In addition, opioid claims showed a positive relationship with the total number of prescribers, reflecting broader prescribing activity. A positive correlation was also observed between opioid prescribers and total prescribers, as well as between opioid prescribers and opioid claims, highlighting that changes in the number of opioid-prescribing providers were closely aligned with both overall provider counts and opioid-specific claim activity.
