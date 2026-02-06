@@ -13,7 +13,7 @@ Analyzed annual variations in prescriber counts, opioid prescriber counts, and t
 **Performance Analysis:**
 Assessed the correlations between drug cost, prescriber counts, opioid prescriber counts, and both overall and opioid-related claims to determine the strength and direction of these relationships and their impact on prescribing outcomes.
 
-An Interactive Tableau dashboard can be downloaded [here](https://public.tableau.com/views/MedicareTableau4/MedicareClaimsandOpioidPrescribingPatterns?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link).
+An Interactive Tableau dashboard can be downloaded [here](https://public.tableau.com/views/MedicareTableau4/MedicareClaimsandOpioidPrescribingPatterns?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link) and [here](https://public.tableau.com/views/MedicareTableau4/MedicareClaimsandOpioidPrescribingPatternsII?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link).
 
 **DATA STRUCTURE & INITIAL CHECKS**
 
