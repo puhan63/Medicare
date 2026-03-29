@@ -19,31 +19,33 @@ An Interactive Tableau dashboard can be downloaded [here](https://public.tableau
 
 **Data Cleaning and Preparation**
 
-The initial data source consisted of three Medicare Part D tables:
+**Data Ingestion**
 
-**Medicare Part D Prescribers – by Provider and Drug**
+The initial dataset consisted of three Medicare Part D tables: Prescribers – by Provider and Drug (1,048,576 rows), Prescribers – by Geography and Drug (115,937 rows), and Opioid Prescribing Rates – by Geography (328,891 rows). All tables were ingested into a SQL-based data pipeline and stored in raw staging tables to support structured preprocessing and ensure reproducibility.
 
-**Medicare Part D Prescribers – by Geography and Drug**
+**Data Cleaning and Standardization**
 
-**Medicare Part D Opioid Prescribing Rates – by Geography**
+Text fields were normalized by trimming whitespace, standardizing capitalization, and removing special characters, ensuring consistency in prescriber names and drug identifiers. ZIP codes were converted to a five-digit format, and FIPS codes were zero-padded to two digits. A custom zip_state_map table containing 24 validated ZIP-to-state mappings was used to backfill missing state values. Non-U.S. states, territories, and military codes were removed, eliminating 9,269 records and ensuring state-level consistency.
 
-*The Prescribers – by Provider and Drug* table contained 1,048,576 records. *The Prescribers – by Geography and Drug* table contained 115,937 records, and the *Opioid Prescribing Rates – by Geography* table contained 328,891 records.
+Numeric fields were validated by removing records with negative values for total_claims, total_drug_cost, and opioid_claims. Opioid prescribing rates were constrained to valid proportions between 0 and 1; out-of-range values (~27% of prescribers, 312,272 records) were set to NULL to prevent distortion in downstream calculations. Drug names and geographic codes were standardized across all 115,936 drug records, and non-state-level records were removed to maintain alignment with U.S. states. Similar cleaning and standardization were applied to the opioid trends dataset, including trimming and zero-padding geographic codes (327,279 records affected) and removing non-state-level or invalid geographic records.
 
-Prior to analysis, the datasets underwent a full data-quality and preprocessing workflow, including cleaning, standardization, and preparation for merging. After these procedures were completed, the integrated dataset contained 1,132,560 records. All data processing and analysis were conducted using SQL. The SQL queries used for these inspections are available [here](https://github.com/puhan63/Medicare/blob/main/Medicare_SQL_Updated_Queries.sql).
+Indexes were created on key columns such as prescriber identifiers (npi), state codes, and year fields to optimize query performance during aggregations and trend analyses.
 
 **Initial Data Integrity and Quality Control**
 
-**Missing Values and Skewness:**
-An initial assessment indicated that most variables exhibited either positive or negative skewness, as well as kurtosis. Key variables of interest—including Tot_Clms, Tot_Drug_Cst, Tot_Prscrb, Tot_Opioid_Prscrb, and Tot_Opioid_Clms—demonstrated positive skewness and elevated kurtosis. Skewness and kurtosis were calculated in Excel due to its ease of use. The corresponding values are provided in the referenced table. Because Spearman’s rank correlation coefficient is less sensitive to outliers, it was selected as the primary method for assessing bivariate associations.
+Missing and incomplete records were addressed by backfilling state values using the ZIP-to-state map and standardizing numeric fields. Duplicates were removed by selecting the record with the maximum total claims per NPI, producing 1,039,306 unique prescriber records. Records with missing, undefined, or invalid prescriber types were assigned to the UNKNOWN category to ensure all observations were accounted for. Irrelevant records, including non-state-level entries and territories, were removed to maintain consistency in state-level analyses.
 
-**Handling Incomplete Records:** 
-Missing data was determined to be structured rather than random. Consequently, any row missing information from several critical columns—Tot_Prscrbr, Tot_Opioid_Clms, and Tot_Opioid_Prscrbr, which were central to the analysis objectives—was removed from the dataset which consisted of 4,920 rows. 
+**Prescriber Categorization**
 
-**Duplicate Records:**
-Duplicate records were evaluated using a staging-table methodology, and no duplicates were identified in any of the datasets.
+Prescribers were grouped into clinically meaningful categories to support interpretable analysis of prescribing patterns. A new prescriber_group column was added to classify providers into PHYSICIAN, ADVANCED_PRACTICE, DENTAL, PODIATRY_OPTOMETRY, PHARMACY, FACILITY_OR_SUPPLIER, LOW_IMPACT_OTHER, and UNKNOWN groups. Physicians were identified based on specialty, affecting 402,650 records, while advanced practice clinicians such as nurse practitioners, physician assistants, CRNAs, and nurse midwives were classified separately (296,953 records). Dental providers were identified using keywords such as “DENT” or “ORAL” (154,282 records), and podiatry/optometry providers were grouped based on specialty (37,184 records). Facility or supplier-related prescribers were identified with keywords such as “HOSPITAL,” “CLINIC,” and “CENTER” (18,671 records). Any remaining prescribers that did not fit prior classifications were assigned to LOW_IMPACT_OTHER (102,637 records). Missing or undefined prescriber types were classified as UNKNOWN (136 records). This categorization ensured every prescriber in the dataset could be analyzed in a meaningful group.
 
-**Irrelevant Data:**
-To optimize the dataset for analysis, fields that did not contribute to the defined analytical objectives were removed. Relevant tables were then joined to consolidate necessary information and ensure a streamlined, analysis-ready dataset.
+**Aggregation and Merging**
+
+State-level summary tables were created by aggregating total claims and drug costs from the raw drug dataset (state_drug_totals, 51 rows) and by aggregating total prescribers, opioid prescribers, opioid claims, and overall claims from the opioid trends dataset (state_opioid_totals, 561 rows, covering 51 states across 11 Medicare years). The final medicare_combined table was generated by joining the cleaned prescriber table with the state-level drug and opioid totals, standardizing prescriber names, and aligning all records by state. This resulted in a comprehensive dataset of 11,432,366 rows, ready for analysis at both the prescriber and state levels. Indexes were created on state and medicare_year columns to optimize filtering, grouping, and aggregation performance for this large dataset.
+
+**Post-Processing and Validation**
+
+After all cleaning, merging, and indexing operations, database integrity checks (unique_checks and foreign_key_checks) were re-enabled to enforce relational constraints. The resulting dataset is fully cleaned, standardized, and integrated, providing a robust foundation for prescriber-level and state-level analyses of drug utilization and opioid prescribing trends.
 
 **EXECUTIVE SUMMARY**
 
