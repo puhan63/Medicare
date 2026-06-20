@@ -208,7 +208,7 @@ ________________________________________
 	•	Integration of socioeconomic and demographic data 
 	•	Anomaly detection for unusual prescribing patterns
 
-
+This is old stuff:
 An Interactive Tableau dashboard can be downloaded [here](https://public.tableau.com/views/MedicareTableau4/MedicareClaimsandOpioidPrescribingPatterns?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link) and [here](https://public.tableau.com/views/MedicareTableau4/MedicareClaimsandOpioidPrescribingPatternsII?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link).
 Below is part of the Tableau dashboard reflecting medicare claims and opioid prescribing patterns from 2013-2023. More examples are included throughout the report. The entire interactive dashboard can be downloaded [here](https://public.tableau.com/views/MedicareTableau4/MedicareClaimsandOpioidPrescribingPatterns?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link) and [here](https://public.tableau.com/views/MedicareTableau4/MedicareClaimsandOpioidPrescribingPatternsII?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link).
 ![image](https://github.com/puhan63/Medicare/blob/main/Medicare%20Image%201.png)
