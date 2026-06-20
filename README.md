@@ -5,9 +5,8 @@ The goal was not just to explore the data, but to build a production-style SQL a
 
 The final output supports two levels of analysis:
 
-•	System-level trends (state and national healthcare patterns) 
-
-•	Provider-level behavior (individual prescriber activity and risk patterns) 
+  •	System-level trends (state and national healthcare patterns) 
+  •	Provider-level behavior (individual prescriber activity and risk patterns) 
 
 **Key Questions This Project Answers:**
 
