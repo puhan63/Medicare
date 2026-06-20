@@ -21,11 +21,9 @@ The final output supports two levels of analysis:
 
 The project uses three large CMS datasets:
 
-•	Prescriber-level Medicare Part D claims (~1.04M records) 
-
-•	Drug utilization by geography (~115K records) 
-
-•	Opioid prescribing rates by geography (~329K records) 
+        •	Prescriber-level Medicare Part D claims (~1.04M records) 
+        •	Drug utilization by geography (~115K records) 
+        •	Opioid prescribing rates by geography (~329K records) 
 
 All data was processed in a SQL-based ETL pipeline built from raw ingestion to final analytical marts.
 
@@ -33,147 +31,116 @@ All data was processed in a SQL-based ETL pipeline built from raw ingestion to f
 
 1. Data Ingestion
 
-All datasets were loaded into SQL staging tables using bulk ingestion (LOAD DATA LOCAL INFILE) and preserved in raw form for reproducibility.
+        All datasets were loaded into SQL staging tables using bulk ingestion (LOAD DATA LOCAL INFILE) and preserved in raw form for reproducibility.
 
 2. Data Cleaning & Standardization (Major Focus Area)
 
-A significant portion of the project focused on resolving real-world healthcare data issues:
+        A significant portion of the project focused on resolving real-world healthcare data issues:
+        
+        Geographic Cleaning
 
-Geographic Cleaning
+                •	Removed invalid and non-U.S. geographic codes (PR, VI, GU, AE, AP, AA, etc.) 
+                •	Eliminated 9,268 invalid geographic records 
+                •	Stored rejected records separately for auditability 
 
-•	Removed invalid and non-U.S. geographic codes (PR, VI, GU, AE, AP, AA, etc.) 
+        Data Standardization
 
-•	Eliminated 9,268 invalid geographic records 
+                •	Normalized state codes, ZIP codes, and FIPS codes 
+                •	Standardized text fields (names, specialties, drug labels) 
+                •	Ensured consistent formatting across all datasets 
 
-•	Stored rejected records separately for auditability 
+        Numeric Validation
 
-Data Standardization
-
-•	Normalized state codes, ZIP codes, and FIPS codes 
-
-•	Standardized text fields (names, specialties, drug labels) 
-
-•	Ensured consistent formatting across all datasets 
-
-Numeric Validation
-
-•	Removed invalid opioid prescribing rates (<0 or >1) 
-
-•	Converted out-of-range values (~312K records) to NULL instead of deleting 
-
-•	Preserved record structure while preventing analytical distortion 
+                •	Removed invalid opioid prescribing rates (<0 or >1) 
+                •	Converted out-of-range values (~312K records) to NULL instead of deleting 
+                •	Preserved record structure while preventing analytical distortion 
 
 3. Prescriber Deduplication (NPI-Level Logic)
 
-Prescriber data often contained multiple records per provider.
+        Prescriber data often contained multiple records per provider.
+        
+        A deduplication strategy was implemented:
 
-A deduplication strategy was implemented:
+                •	Grouped by NPI 
+                •	Retained record with maximum total claims per provider 
 
-•	Grouped by NPI 
+        Result:
 
-•	Retained record with maximum total claims per provider 
-
-Result:
-
-•	1,039,307 unique prescriber records 
+                •	1,039,307 unique prescriber records 
 
 4. Provider Classification (Healthcare Segmentation)
 
-Prescribers were grouped into clinically meaningful categories:
+        Prescribers were grouped into clinically meaningful categories:
 
-•	PHYSICIAN 
+                •	PHYSICIAN 
+                •	ADVANCED_PRACTICE 
+                •	DENTAL 
+                •	PODIATRY / OPTOMETRY 
+                •	PHARMACY 
+                •	FACILITY / ORGANIZATIONAL PROVIDERS 
+                •	LOW_IMPACT_OTHER 
+                •	UNKNOWN 
 
-•	ADVANCED_PRACTICE 
-
-•	DENTAL 
-
-•	PODIATRY / OPTOMETRY 
-
-•	PHARMACY 
-
-•	FACILITY / ORGANIZATIONAL PROVIDERS 
-
-•	LOW_IMPACT_OTHER 
-
-•	UNKNOWN 
-
-This allowed downstream analysis of prescribing behavior by provider type rather than raw specialty text.
+        This allowed downstream analysis of prescribing behavior by provider type rather than raw specialty text.
 
 5. Geographic Validation & Filtering
 
-To ensure consistency in state-level reporting:
+        To ensure consistency in state-level reporting:
 
-•	Only U.S. states were retained 
-
-•	Territories and invalid regions were removed 
-
-•	State-level drug and opioid datasets were aligned using FIPS mapping 
+                •	Only U.S. states were retained 
+                •	Territories and invalid regions were removed 
+                •	State-level drug and opioid datasets were aligned using FIPS mapping 
 
 **Provider-Level Dataset (Clinical Behavior View)**
 
-tableau_prescriber_dataset
+        tableau_prescriber_dataset
 
-•	1,039,307 prescriber records 
+                •	1,039,307 prescriber records 
 
-•	Contains: 
+	Contains: 
 
-o	Total claims per provider 
+                o	Total claims per provider 
+                o	Opioid claims 
+                o	Prescriber group classification 
+                o	Risk score relationships 
+                o	Cost and utilization metrics 
 
-o	Opioid claims 
+        Used for:
 
-o	Prescriber group classification 
-
-o	Risk score relationships 
-
-o	Cost and utilization metrics 
-
-Used for:
-
-•	Provider segmentation 
-
-•	High-risk prescribing analysis 
-
-•	Specialty comparisons 
-
-•	Behavioral pattern analysis 
+                •	Provider segmentation 
+                •	High-risk prescribing analysis 
+                •	Specialty comparisons 
+                •	Behavioral pattern analysis 
 
 **Statistical Analysis Layer**
 
-State Correlation Matrix
+        State Correlation Matrix
 
-•	Claims vs Cost 
+                •	Claims vs Cost 
+                •	Claims vs Prescribers 
+                •	Opioid Claims vs Opioid Prescribers 
 
-•	Claims vs Prescribers 
+        Provider Correlation Matrix
 
-•	Opioid Claims vs Opioid Prescribers 
+                •	Claims vs Cost 
+                •	Claims vs Beneficiaries 
+                •	Opioid Claims vs Total Claims 
+                •	Risk Score vs Claims 
+                •	Risk Score vs Opioid Claims 
 
-Provider Correlation Matrix
-
-•	Claims vs Cost 
-
-•	Claims vs Beneficiaries 
-
-•	Opioid Claims vs Total Claims 
-
-•	Risk Score vs Claims 
-
-•	Risk Score vs Opioid Claims 
-
-These outputs quantify relationships between healthcare utilization, cost, and prescribing behavior.
+        These outputs quantify relationships between healthcare utilization, cost, and prescribing behavior.
 
 **ETL Governance & Auditability**
 
-An ETL audit logging system was implemented to track all major transformations:
+        An ETL audit logging system was implemented to track all major transformations:
+        
+        Tracked:
 
-Tracked:
+                •	Records removed due to invalid geography 
+                •	Deduplication outcomes 
+                •	Cleaning operations affecting numeric fields 
 
-•	Records removed due to invalid geography 
-
-•	Deduplication outcomes 
-
-•	Cleaning operations affecting numeric fields 
-
-This ensures full transparency and reproducibility of all transformations.
+        This ensures full transparency and reproducibility of all transformations.
 
 **Key Findings (High-Level Insights)**
 
