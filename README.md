@@ -10,6 +10,7 @@ The final output supports two levels of analysis:
 •	Provider-level behavior (individual prescriber activity and risk patterns) 
 
 **Key Questions This Project Answers:**
+
 •	How has overall prescription activity changed from 2013–2023? 
 
 •	Are opioid prescriptions increasing or decoupling from total prescribing trends? 
@@ -22,50 +23,200 @@ The final output supports two levels of analysis:
 
 •	Is opioid prescribing more strongly linked to system scale or provider behavior? 
 
+**Data Overview**
+
+The project uses three large CMS datasets:
+
+•	Prescriber-level Medicare Part D claims (~1.04M records) 
+
+•	Drug utilization by geography (~115K records) 
+
+•	Opioid prescribing rates by geography (~329K records) 
+
+All data was processed in a SQL-based ETL pipeline built from raw ingestion to final analytical marts.
+
+**End-to-End Workflow**
+
+1. Data Ingestion
+
+All datasets were loaded into SQL staging tables using bulk ingestion (LOAD DATA LOCAL INFILE) and preserved in raw form for reproducibility.
+
+2. Data Cleaning & Standardization (Major Focus Area)
+
+A significant portion of the project focused on resolving real-world healthcare data issues:
+
+Geographic Cleaning
+
+•	Removed invalid and non-U.S. geographic codes (PR, VI, GU, AE, AP, AA, etc.) 
+
+•	Eliminated 9,268 invalid geographic records 
+
+•	Stored rejected records separately for auditability 
+
+Data Standardization
+
+•	Normalized state codes, ZIP codes, and FIPS codes 
+
+•	Standardized text fields (names, specialties, drug labels) 
+
+•	Ensured consistent formatting across all datasets 
+
+Numeric Validation
+
+•	Removed invalid opioid prescribing rates (<0 or >1) 
+
+•	Converted out-of-range values (~312K records) to NULL instead of deleting 
+
+•	Preserved record structure while preventing analytical distortion 
+
+3. Prescriber Deduplication (NPI-Level Logic)
+
+Prescriber data often contained multiple records per provider.
+
+A deduplication strategy was implemented:
+
+•	Grouped by NPI 
+
+•	Retained record with maximum total claims per provider 
+
+Result:
+
+•	1,039,307 unique prescriber records 
+
+4. Provider Classification (Healthcare Segmentation)
+
+Prescribers were grouped into clinically meaningful categories:
+
+•	PHYSICIAN 
+
+•	ADVANCED_PRACTICE 
+
+•	DENTAL 
+
+•	PODIATRY / OPTOMETRY 
+
+•	PHARMACY 
+
+•	FACILITY / ORGANIZATIONAL PROVIDERS 
+
+•	LOW_IMPACT_OTHER 
+
+•	UNKNOWN 
+
+This allowed downstream analysis of prescribing behavior by provider type rather than raw specialty text.
+
+5. Geographic Validation & Filtering
+
+To ensure consistency in state-level reporting:
+
+•	Only U.S. states were retained 
+
+•	Territories and invalid regions were removed 
+
+•	State-level drug and opioid datasets were aligned using FIPS mapping 
+
+**Provider-Level Dataset (Clinical Behavior View)**
+
+tableau_prescriber_dataset
+
+•	1,039,307 prescriber records 
+
+•	Contains: 
+
+o	Total claims per provider 
+
+o	Opioid claims 
+
+o	Prescriber group classification 
+
+o	Risk score relationships 
+
+o	Cost and utilization metrics 
+
+Used for:
+
+•	Provider segmentation 
+
+•	High-risk prescribing analysis 
+
+•	Specialty comparisons 
+
+•	Behavioral pattern analysis 
+
+**Statistical Analysis Layer**
+
+State Correlation Matrix
+
+•	Claims vs Cost 
+
+•	Claims vs Prescribers 
+
+•	Opioid Claims vs Opioid Prescribers 
+
+Provider Correlation Matrix
+
+•	Claims vs Cost 
+
+•	Claims vs Beneficiaries 
+
+•	Opioid Claims vs Total Claims 
+
+•	Risk Score vs Claims 
+
+•	Risk Score vs Opioid Claims 
+
+These outputs quantify relationships between healthcare utilization, cost, and prescribing behavior.
+
+**ETL Governance & Auditability**
+
+An ETL audit logging system was implemented to track all major transformations:
+
+Tracked:
+
+•	Records removed due to invalid geography 
+
+•	Deduplication outcomes 
+
+•	Cleaning operations affecting numeric fields 
+
+This ensures full transparency and reproducibility of all transformations.
+
+**Key Findings (High-Level Insights)**
+
+1. Prescription Volume Drives Cost
+States and providers with higher claim volumes consistently show higher drug costs, indicating that utilization is the primary cost driver in Medicare Part D.
+________________________________________
+
+2. Opioid Prescribing Is Declining Relative to Total Claims
+While overall prescription activity has increased over time, opioid claims have declined relative to total utilization, indicating a structural shift in prescribing behavior post-2016.
+________________________________________
+
+3. Provider Capacity Strongly Influences Utilization
+Higher prescriber counts are strongly associated with increased claim volume, suggesting that system capacity is a key driver of healthcare utilization.
+________________________________________
+
+4. Opioid Activity Is Linked to Overall Prescribing Behavior
+Opioid claims scale with total claims, suggesting opioid prescribing is more reflective of general prescribing intensity than isolated provider behavior.
+________________________________________
+
+5. Patient Complexity Matters
+Risk score correlations show that higher patient complexity is associated with increased prescribing activity, including opioid utilization.
+________________________________________
 
 
-**Trend Analysis:**
-Conducted a year-over-year assessment of overall prescription drug claims and opioid-related claims to identify patterns, shifts, and emerging trends in medication utilization.
 
-**Demographic Impact Assessment:**
-Analyzed annual variations in prescriber counts, opioid prescriber counts, and total drug costs to understand their influence on prescribing behavior and overall claims activity.
 
-**Performance Analysis:**
-Assessed the correlations between drug cost, prescriber counts, opioid prescriber counts, and both overall and opioid-related claims to determine the strength and direction of these relationships and their impact on prescribing outcomes.
+
+
 
 An Interactive Tableau dashboard can be downloaded [here](https://public.tableau.com/views/MedicareTableau4/MedicareClaimsandOpioidPrescribingPatterns?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link) and [here](https://public.tableau.com/views/MedicareTableau4/MedicareClaimsandOpioidPrescribingPatternsII?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link).
 
-**DATA STRUCTURE & INITIAL CHECKS**
 
-**Data Cleaning and Preparation**
-
-**Data Ingestion**
-
-The initial dataset consisted of three Medicare Part D tables: Prescribers – by Provider and Drug (1,048,576 rows), Prescribers – by Geography and Drug (115,937 rows), and Opioid Prescribing Rates – by Geography (328,891 rows). All tables were ingested into a SQL-based data pipeline and stored in raw staging tables to support structured preprocessing and ensure reproducibility.
-
-**Data Cleaning and Standardization**
-
-Text fields were normalized by trimming whitespace, standardizing capitalization, and removing special characters, ensuring consistency in prescriber names and drug identifiers. ZIP codes were converted to a five-digit format, and FIPS codes were zero-padded to two digits. A custom zip_state_map table containing 24 validated ZIP-to-state mappings was used to backfill missing state values. Non-U.S. states, territories, and military codes were removed, eliminating 9,269 records and ensuring state-level consistency.
-
-Numeric fields were validated by removing records with negative values for total_claims, total_drug_cost, and opioid_claims. Opioid prescribing rates were constrained to valid proportions between 0 and 1; out-of-range values (~27% of prescribers, 312,272 records) were set to NULL to prevent distortion in downstream calculations. Drug names and geographic codes were standardized across all 115,936 drug records, and non-state-level records were removed to maintain alignment with U.S. states. Similar cleaning and standardization were applied to the opioid trends dataset, including trimming and zero-padding geographic codes (327,279 records affected) and removing non-state-level or invalid geographic records.
-
-Indexes were created on key columns such as prescriber identifiers (npi), state codes, and year fields to optimize query performance during aggregations and trend analyses.
-
-**Initial Data Integrity and Quality Control**
-
-Missing and incomplete records were addressed by backfilling state values using the ZIP-to-state map and standardizing numeric fields. Duplicates were removed by selecting the record with the maximum total claims per NPI, producing 1,039,306 unique prescriber records. Records with missing, undefined, or invalid prescriber types were assigned to the UNKNOWN category to ensure all observations were accounted for. Irrelevant records, including non-state-level entries and territories, were removed to maintain consistency in state-level analyses.
-
-**Prescriber Categorization**
 
 Prescribers were grouped into clinically meaningful categories to support interpretable analysis of prescribing patterns. A new prescriber_group column was added to classify providers into PHYSICIAN, ADVANCED_PRACTICE, DENTAL, PODIATRY_OPTOMETRY, PHARMACY, FACILITY_OR_SUPPLIER, LOW_IMPACT_OTHER, and UNKNOWN groups. Physicians were identified based on specialty, affecting 402,650 records, while advanced practice clinicians such as nurse practitioners, physician assistants, CRNAs, and nurse midwives were classified separately (296,953 records). Dental providers were identified using keywords such as “DENT” or “ORAL” (154,282 records), and podiatry/optometry providers were grouped based on specialty (37,184 records). Facility or supplier-related prescribers were identified with keywords such as “HOSPITAL,” “CLINIC,” and “CENTER” (18,671 records). Any remaining prescribers that did not fit prior classifications were assigned to LOW_IMPACT_OTHER (102,637 records). Missing or undefined prescriber types were classified as UNKNOWN (136 records). This categorization ensured every prescriber in the dataset could be analyzed in a meaningful group.
 
-**Aggregation and Merging**
 
-State-level summary tables were created by aggregating total claims and drug costs from the raw drug dataset (state_drug_totals, 51 rows) and by aggregating total prescribers, opioid prescribers, opioid claims, and overall claims from the opioid trends dataset (state_opioid_totals, 561 rows, covering 51 states across 11 Medicare years). The final medicare_combined table was generated by joining the cleaned prescriber table with the state-level drug and opioid totals, standardizing prescriber names, and aligning all records by state. This resulted in a comprehensive dataset of 11,432,366 rows, ready for analysis at both the prescriber and state levels. Indexes were created on state and medicare_year columns to optimize filtering, grouping, and aggregation performance for this large dataset.
 
-**Post-Processing and Validation**
-
-After all cleaning, merging, and indexing operations, database integrity checks (unique_checks and foreign_key_checks) were re-enabled to enforce relational constraints. The resulting dataset is fully cleaned, standardized, and integrated, providing a robust foundation for prescriber-level and state-level analyses of drug utilization and opioid prescribing trends.
 
 **EXECUTIVE SUMMARY**
 
