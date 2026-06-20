@@ -10,17 +10,12 @@ The final output supports two levels of analysis:
 
 **Key Questions This Project Answers:**
 
-  •	How has overall prescription activity changed from 2013–2023? 
-
-  •	Are opioid prescriptions increasing or decoupling from total prescribing trends? 
-
-  •	Which states have the highest opioid utilization relative to population? 
-
-  •	How do provider types differ in prescribing behavior? 
-
-  •	What drives prescription volume more: patient population, provider count, or cost? 
-
-  •	Is opioid prescribing more strongly linked to system scale or provider behavior? 
+        •	How has overall prescription activity changed from 2013–2023? 
+        •	Are opioid prescriptions increasing or decoupling from total prescribing trends? 
+        •	Which states have the highest opioid utilization relative to population? 
+        •	How do provider types differ in prescribing behavior? 
+        •	What drives prescription volume more: patient population, provider count, or cost? 
+        •	Is opioid prescribing more strongly linked to system scale or provider behavior? 
 
 **Data Overview**
 
