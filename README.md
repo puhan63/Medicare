@@ -1,8 +1,28 @@
-# Medicare Part D Prescription & Opioid Trends Analysis
+# Medicare Part D Prescription & Opioid Utilization Analytics (SQL ETL & Tableau Project)
+This project analyzes Medicare Part D prescription drug data from the Centers for Medicare & Medicaid Services (CMS) to understand how prescribing behavior, drug costs, and opioid utilization vary across U.S. states and providers over time.
 
-The Centers for Medicare & Medicaid Services (CMS) provides detailed data on prescription drugs dispensed to Medicare Part D beneficiaries. This dataset includes key information such as prescriber National Provider Identifiers (NPIs), total drug costs, brand and generic drug names, and geographic variations in prescribing behavior. Notably, the dataset also captures opioid prescribing rates at the regional level.
+The goal was not just to explore the data, but to build a production-style SQL analytics pipeline that transforms raw CMS files into clean, validated, and Tableau-ready datasets suitable for healthcare reporting and decision-making.
 
-This project focuses on performing a comprehensive analysis of these data to identify meaningful patterns and insights related to medication utilization and prescription claims among Medicare recipients. The goal is to synthesize the information into actionable findings that enhance understanding of prescribing trends, cost dynamics, and opioid-related behaviors within the Medicare system.
+The final output supports two levels of analysis:
+
+•	System-level trends (state and national healthcare patterns) 
+
+•	Provider-level behavior (individual prescriber activity and risk patterns) 
+
+**Key Questions This Project Answers:**
+•	How has overall prescription activity changed from 2013–2023? 
+
+•	Are opioid prescriptions increasing or decoupling from total prescribing trends? 
+
+•	Which states have the highest opioid utilization relative to population? 
+
+•	How do provider types differ in prescribing behavior? 
+
+•	What drives prescription volume more: patient population, provider count, or cost? 
+
+•	Is opioid prescribing more strongly linked to system scale or provider behavior? 
+
+
 
 **Trend Analysis:**
 Conducted a year-over-year assessment of overall prescription drug claims and opioid-related claims to identify patterns, shifts, and emerging trends in medication utilization.
