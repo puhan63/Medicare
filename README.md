@@ -21,37 +21,6 @@ The final output supports two levels of analysis:
 
 ## Project Architecture
 
-```mermaid
-flowchart TD
-
-A[CMS Raw Files] --> B[SQL Staging Tables]
-
-B --> C[Data Cleaning & Validation]
-
-C --> D[Geographic Standardization]
-
-D --> E[Prescriber Deduplication]
-
-E --> F[Feature Engineering]
-
-F --> G[Population-Normalized Metrics]
-
-G --> H[Analytical Data Marts]
-
-C -. Audit Logging .-> M[ETL Audit Log]
-D -. Audit Logging .-> M
-E -. Audit Logging .-> M
-
-H --> I[State Dashboard Dataset]
-H --> J[Provider Dashboard Dataset]
-H --> K[Correlation Analysis Dataset]
-
-I --> L[Tableau Dashboards]
-J --> L
-K --> L
-```
-
-
 CMS Medicare Part D Files
        
 		│
@@ -93,6 +62,30 @@ Data Cleaning & Validation
                                 │
                                 ▼
                          Tableau Dashboards
+
+**Project Scale**
+
+***1.4M+ healthcare records processed***
+
+| Metric | Value |
+|---------|---------:|
+| Prescriber Records | 1,039,307 |
+| Drug Utilization Records | 115,000+ |
+| Opioid Trend Records | 329,000+ |
+| States Covered | 51 |
+| Years Covered | 2013–2023 |
+| Final Tableau Datasets | 4 |
+| Unique Prescribers (NPI) | 1,039,307 |
+
+**Data Quality Improvements**
+
+| Validation Step | Result |
+|-----------------|---------|
+| Geographic Validation | 9,268 invalid records removed |
+| Opioid Rate Validation | 312,000+ values corrected |
+| State/FIPS Standardization | Completed |
+| Prescriber Deduplication | 1.04M unique providers retained |
+| ETL Audit Logging | Implemented |
 
 **Interactive Tableau Dashboards**
 
