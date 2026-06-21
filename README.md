@@ -167,7 +167,6 @@ JOIN (
 ON r.npi = m.npi
 AND r.total_claims = m.max_claims;
 ```
-
 **State-Level Dataset (Executive View)**
 
 **State-Level Dashboard**
