@@ -107,7 +107,7 @@ All data was processed in a SQL-based ETL pipeline built from raw ingestion to f
 
 **State-Level Dashboard**
 
-![State Dashboard](images/state_dashboard.png)
+![State Dashboard](https://github.com/puhan63/Medicare/blob/main/Medicare%20Part%20D%20and%20Opioid%20Utilization%20Trends.png)
 
 This dashboard explores prescription utilization, opioid prescribing rates, population-adjusted metrics, and geographic variation across all U.S. states.
 
