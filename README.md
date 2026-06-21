@@ -87,6 +87,10 @@ Data Cleaning & Validation
 | Prescriber Deduplication | 1.04M unique providers retained |
 | ETL Audit Logging | Implemented |
 
+**Repository Contents**
+
+Full SQL ETL Pipeline: [View SQL Code](sql/medicare_part_d_pipeline.sql)
+
 **Interactive Tableau Dashboards**
 
 This project includes a multi-dashboard Tableau solution consisting of a landing page and three analytical dashboards. The dashboards allow users to explore Medicare Part D utilization patterns at both the state and provider levels.
