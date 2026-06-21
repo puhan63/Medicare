@@ -20,31 +20,38 @@ The final output supports two levels of analysis:
 **Project Architecture**
 
 CMS Medicare Part D Files
-        │
+       
+		│
         ▼
   
   SQL Staging Tables
-        │
+        
+		│
         ▼
 
 Data Cleaning & Validation
-        │
+        
+		│
         ▼
  
  Geographic Filtering
-        │
+        
+		│
         ▼
  
  Prescriber Deduplication
-        │
+        
+		│
         ▼
  
  Provider Classification
-        │
+        
+		│
         ▼
  
  Analytical Data Marts
-        │
+        
+		│
         ├──────────────► State Dashboard Dataset
         │
         ├──────────────► Provider Dashboard Dataset
