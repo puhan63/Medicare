@@ -132,6 +132,10 @@ This dashboard explores prescription utilization, opioid prescribing rates, popu
 
 **Provider-Level Dataset (Clinical Behavior View)**
 
+**Provider-Level Dashboard**
+
+![Provider Dashboard](https://github.com/puhan63/Medicare/blob/main/Prescriber%20Workforce%20and%20Healthcare%20Utilization.png)
+
         tableau_prescriber_dataset
 
                 •	1,039,307 prescriber records 
