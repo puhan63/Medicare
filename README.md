@@ -111,24 +111,24 @@ All data was processed in a SQL-based ETL pipeline built from raw ingestion to f
 
 This dashboard explores prescription utilization, opioid prescribing rates, population-adjusted metrics, and geographic variation across all U.S. states.
 
-**tableau_dataset**
+		tableau_dataset
 
- •	561 rows (51 states × 11 years)
+			 •	561 rows (51 states × 11 years)
 
-	Contains:
+				Contains:
 
-		- Total claims
-		- Opioid claims
-		- Prescriber counts
-		- Population-adjusted metrics
-		- Cost and utilization measures
+				•	Total claims 
+                •	Opioid claims
+				•	Population-adjusted metrics 
+                •	Cost and utilization measures
+				
 
-	Used for:
+				Used for:
 
-		- State comparisons
-		- Trend analysis
-		- Public health reporting
-		- Geographic opioid analysis
+                •	State comparisons
+				•	Trend analysis
+                •	Public health reporting
+				•	Geographic opioid analysis
 
 **Provider-Level Dataset (Clinical Behavior View)**
 
@@ -136,15 +136,15 @@ This dashboard explores prescription utilization, opioid prescribing rates, popu
 
                 •	1,039,307 prescriber records 
 
-	Contains: 
+				Contains: 
 
-                o	Total claims per provider 
-                o	Opioid claims 
-                o	Prescriber group classification 
-                o	Risk score relationships 
-                o	Cost and utilization metrics 
+                •	Total claims per provider 
+                •	Opioid claims 
+                •	Prescriber group classification 
+                •	Risk score relationships 
+                •	Cost and utilization metrics 
 
-        Used for:
+		        Used for:
 
                 •	Provider segmentation 
                 •	High-risk prescribing analysis 
