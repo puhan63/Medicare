@@ -17,6 +17,37 @@ The final output supports two levels of analysis:
         •	What drives prescription volume more: patient population, provider count, or cost? 
         •	Is opioid prescribing more strongly linked to system scale or provider behavior? 
 
+**Project Architecture**
+
+CMS Medicare Part D Files
+        │
+        ▼
+  SQL Staging Tables
+        │
+        ▼
+Data Cleaning & Validation
+        │
+        ▼
+ Geographic Filtering
+        │
+        ▼
+ Prescriber Deduplication
+        │
+        ▼
+ Provider Classification
+        │
+        ▼
+ Analytical Data Marts
+        │
+        ├──────────────► State Dashboard Dataset
+        │
+        ├──────────────► Provider Dashboard Dataset
+        │
+        └──────────────► Correlation Analysis Dataset
+                                │
+                                ▼
+                         Tableau Dashboards
+
 **Interactive Tableau Dashboards**
 
 This project includes a multi-dashboard Tableau solution consisting of a landing page and three analytical dashboards. The dashboards allow users to explore Medicare Part D utilization patterns at both the state and provider levels.
