@@ -89,7 +89,7 @@ Data Cleaning & Validation
 
 **Repository Contents**
 
-Full SQL ETL Pipeline: [View SQL Code](sql/medicare_part_d_pipeline.sql)
+Full SQL ETL Pipeline: [View SQL Code](https://github.com/puhan63/Medicare/blob/main/Medicare_SQL_Updated_Queries.sql)
 
 **Interactive Tableau Dashboards**
 
