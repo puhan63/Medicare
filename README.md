@@ -161,7 +161,7 @@ This dashboard examines prescribing behavior across provider groups, opioid util
 
 **Correlation Analysis Dashboard**
 
-![Correlation Dashboard](images/correlation_dashboard.png)
+![Correlation Dashboard](https://github.com/puhan63/Medicare/blob/main/Drivers%20of%20Medicare%20Utilization%20and%20Opioid%20Prescribing.png)
 
 This dashboard visualizes relationships between claims volume, cost, provider counts, risk scores, and opioid prescribing activity.
 
