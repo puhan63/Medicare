@@ -21,7 +21,7 @@ The final output supports two levels of analysis:
 
 This project includes a multi-dashboard Tableau solution consisting of a landing page and three analytical dashboards. The dashboards allow users to explore Medicare Part D utilization patterns at both the state and provider levels.
 
-		[Medicare Dashboard](https://public.tableau.com/app/profile/patricia.uhan/viz/Medicare_Part_D_Final/ProjectOverview?publish=yes)
+[Medicare Dashboard](https://public.tableau.com/app/profile/patricia.uhan/viz/Medicare_Part_D_Final/ProjectOverview?publish=yes)
 
 **Dashboard Navigation**
 
