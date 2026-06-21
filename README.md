@@ -19,8 +19,6 @@ The final output supports two levels of analysis:
 
 **Project Architecture**
 
-## Project Architecture
-
 CMS Medicare Part D Files
        
 		│
@@ -178,6 +176,10 @@ All data was processed in a SQL-based ETL pipeline built from raw ingestion to f
                 •	State-level drug and opioid datasets were aligned using FIPS mapping 
 
 **Key SQL Techniques**
+
+The complete SQL ETL pipeline can be viewed here:
+
+➡️ **[Full SQL Pipeline](https://github.com/puhan63/Medicare/blob/main/Medicare_SQL_Updated_Queries.sql)**
 
 ***Prescriber Deduplication Using SQL***
 
