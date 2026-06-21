@@ -19,6 +19,33 @@ The final output supports two levels of analysis:
 
 **Project Architecture**
 
+flowchart TD
+
+A[CMS Raw Files] --> B[SQL Staging Tables]
+
+B --> C[Data Cleaning & Validation]
+
+C --> D[Geographic Standardization]
+
+D --> E[Prescriber Deduplication]
+
+E --> F[Feature Engineering]
+
+F --> G[Population-Normalized Metrics]
+
+G --> H[Analytical Data Marts]
+
+H --> I[State Dashboard Dataset]
+
+H --> J[Provider Dashboard Dataset]
+
+H --> K[Correlation Analysis Dataset]
+
+I --> L[Tableau Dashboards]
+J --> L
+K --> L
+
+
 CMS Medicare Part D Files
        
 		│
