@@ -259,8 +259,3 @@ ________________________________________
 	•	Integration of socioeconomic and demographic data 
 	•	Anomaly detection for unusual prescribing patterns
 
-
-	
-
-![image](https://github.com/puhan63/Medicare/blob/main/Medicare%20Image%201.png)
-![image](https://github.com/puhan63/Medicare/blob/main/Medicare%20Image%202.png)
