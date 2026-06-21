@@ -167,6 +167,35 @@ JOIN (
 ON r.npi = m.npi
 AND r.total_claims = m.max_claims;
 ```
+
+***Population-Normalized State Metrics***
+
+To support fair state comparisons, opioid utilization and provider counts were normalized by population.
+
+```sql
+CAST(o.opioid_claims AS DECIMAL(18,4))
+    / NULLIF(p.population, 0) * 1000
+    AS opioid_claims_per_1000,
+
+CAST(o.total_prescribers AS DECIMAL(18,4))
+    / NULLIF(p.population, 0) * 1000
+    AS prescribers_per_1000
+```
+
+***Pearson Correlation Analysis in SQL***
+
+Relationships between prescribing volume, cost, and patient complexity were calculated directly in SQL using Pearson correlation coefficients.
+
+```sql
+(AVG(total_claims * total_drug_cost)
+ - AVG(total_claims) * AVG(total_drug_cost))
+/
+NULLIF(
+    STDDEV(total_claims)
+    * STDDEV(total_drug_cost),
+0)
+AS corr_claims_cost
+```
 **State-Level Dataset (Executive View)**
 
 **State-Level Dashboard**
