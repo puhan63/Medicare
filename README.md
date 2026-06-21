@@ -136,6 +136,8 @@ This dashboard explores prescription utilization, opioid prescribing rates, popu
 
 ![Provider Dashboard](https://github.com/puhan63/Medicare/blob/main/Prescriber%20Workforce%20and%20Healthcare%20Utilization.png)
 
+This dashboard examines prescribing behavior across provider groups, opioid utilization patterns, and high-volume prescribers.
+
         tableau_prescriber_dataset
 
                 •	1,039,307 prescriber records 
@@ -156,6 +158,12 @@ This dashboard explores prescription utilization, opioid prescribing rates, popu
                 •	Behavioral pattern analysis 
 
 **Statistical Analysis Layer**
+
+**Correlation Analysis Dashboard**
+
+![Correlation Dashboard](images/correlation_dashboard.png)
+
+This dashboard visualizes relationships between claims volume, cost, provider counts, risk scores, and opioid prescribing activity.
 
         State Correlation Matrix
 
