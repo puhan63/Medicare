@@ -1,4 +1,14 @@
 # Medicare Part D Prescription & Opioid Utilization Analytics (SQL ETL & Tableau Project)
+
+## Quick Summary
+
+- Built a SQL-based ETL pipeline processing 1.4M+ Medicare Part D records
+- Designed state-level and provider-level analytical data marts
+- Cleaned, standardized, and validated large-scale healthcare datasets
+- Implemented prescriber deduplication and geographic normalization logic
+- Built Tableau dashboards for opioid utilization and cost analysis
+- Performed statistical correlation analysis using SQL
+
 This project analyzes Medicare Part D prescription drug data from the Centers for Medicare & Medicaid Services (CMS) to understand how prescribing behavior, drug costs, and opioid utilization vary across U.S. states and providers over time.
 
 The goal was not just to explore the data, but to build a production-style SQL analytics pipeline that transforms raw CMS files into clean, validated, and Tableau-ready datasets suitable for healthcare reporting and decision-making.
