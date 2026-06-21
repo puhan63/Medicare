@@ -19,6 +19,9 @@ The final output supports two levels of analysis:
 
 **Project Architecture**
 
+## Project Architecture
+
+```mermaid
 flowchart TD
 
 A[CMS Raw Files] --> B[SQL Staging Tables]
@@ -35,15 +38,18 @@ F --> G[Population-Normalized Metrics]
 
 G --> H[Analytical Data Marts]
 
+C -. Audit Logging .-> M[ETL Audit Log]
+D -. Audit Logging .-> M
+E -. Audit Logging .-> M
+
 H --> I[State Dashboard Dataset]
-
 H --> J[Provider Dashboard Dataset]
-
 H --> K[Correlation Analysis Dataset]
 
 I --> L[Tableau Dashboards]
 J --> L
 K --> L
+```
 
 
 CMS Medicare Part D Files
