@@ -147,6 +147,27 @@ All data was processed in a SQL-based ETL pipeline built from raw ingestion to f
                 •	Territories and invalid regions were removed 
                 •	State-level drug and opioid datasets were aligned using FIPS mapping 
 
+**Key SQL Techniques**
+
+***Prescriber Deduplication Using SQL***
+
+CMS source data occasionally contained duplicate NPI records. To preserve the most representative provider profile, the record with the highest claims volume was retained.
+
+```sql
+CREATE TABLE prescriber_clean AS
+SELECT r.*
+FROM raw_prescriber r
+JOIN (
+    SELECT
+        npi,
+        MAX(total_claims) AS max_claims
+    FROM raw_prescriber
+    GROUP BY npi
+) m
+ON r.npi = m.npi
+AND r.total_claims = m.max_claims;
+```
+
 **State-Level Dataset (Executive View)**
 
 **State-Level Dashboard**
