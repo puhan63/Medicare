@@ -73,7 +73,7 @@ Data Cleaning & Validation
 
 **Project Scale**
 
-***1.4M+ healthcare records processed***
+***Total pipeline volume: ~1.48M healthcare records processed across three Medicare Part D datasets (2013–2023).***
 
 | Metric | Value |
 |---------|---------:|
