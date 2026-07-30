@@ -23,6 +23,40 @@ The final output supports two levels of analysis:
 - **MySQL Workbench 8.0** — SQL ETL pipeline, data validation, feature engineering, statistical analysis, and analytical data marts.
 - **Tableau Public** — Interactive dashboards for state-level, provider-level, and correlation analysis.
 
+## Data Overview
+
+The project uses three large CMS datasets:
+
+        •	Prescriber-level Medicare Part D claims (~1.04M records) 
+        •	Drug utilization by geography (~115K records) 
+        •	Opioid prescribing rates by geography (~329K records) 
+
+All data was processed in a SQL-based ETL pipeline built from raw ingestion to final analytical marts.
+
+## Why This Project Matters
+
+This project reflects a real-world healthcare analytics workflow:
+
+		•	Raw government healthcare data is messy and inconsistent 
+		•	Geographic and provider-level standardization is required before analysis 
+		•	Data quality issues must be tracked, not ignored 
+		•	Both system-level and provider-level views are necessary for meaningful insight 
+
+The result is a structured, validated analytics pipeline that mirrors how healthcare data is prepared in production BI environments.
+
+## What This Project Demonstrates
+
+* End-to-end ETL design — built a production-style SQL pipeline that transforms raw CMS Medicare Part D datasets into clean, validated, analytics-ready data marts for business intelligence reporting.
+* Large-scale healthcare data processing — processed more than 1.4 million Medicare Part D records spanning 2013–2023, integrating multiple CMS datasets into a unified analytical model.
+* Data quality enforcement — implemented validation rules for geographic codes, opioid prescribing rates, duplicate providers, and standardized identifiers while preserving rejected records for auditability.
+* Real-world data cleaning patterns — normalized state names, ZIP codes, FIPS codes, provider specialties, and drug labels while correcting inconsistent and missing values commonly found in public healthcare datasets.
+* Provider deduplication using SQL — designed NPI-based deduplication logic to retain the most representative provider record, ensuring accurate provider-level reporting across more than one million prescribers.
+* Feature engineering for analytics — created population-adjusted utilization metrics, provider classifications, prescribing rates, and other derived fields to support meaningful comparisons across states and provider groups.
+* Population-normalized healthcare analytics — developed per-capita utilization measures that enable fair geographic comparisons independent of population size.
+* Statistical analysis in SQL — implemented Pearson correlation calculations directly in SQL to quantify relationships among prescription volume, drug cost, provider supply, patient complexity, and opioid utilization.
+* Business intelligence dashboard design — produced Tableau-ready analytical data marts powering interactive dashboards for state trends, provider behavior, opioid utilization, and statistical correlation analysis.
+* Healthcare reporting and decision support — translated complex Medicare Part D data into executive-level insights supporting public health monitoring, prescribing behavior analysis, and healthcare resource planning.
+
 ## Key Questions This Project Answers:
 
         •	How has overall prescription activity changed from 2013–2023? 
@@ -76,7 +110,7 @@ Data Cleaning & Validation
                                 ▼
                          Tableau Dashboards
 
-**Project Scale**
+## Project Scale
 
 ***Total pipeline volume: ~1.48M healthcare records processed across three Medicare Part D datasets (2013–2023).***
 
@@ -90,7 +124,7 @@ Data Cleaning & Validation
 | Final Tableau Datasets | 4 |
 | Unique Prescribers (NPI) | 1,039,307 |
 
-**Data Quality Improvements**
+### Data Quality Improvements
 
 | Validation Step | Result |
 |-----------------|---------|
@@ -100,13 +134,46 @@ Data Cleaning & Validation
 | Prescriber Deduplication | 1.04M unique providers retained |
 | ETL Audit Logging | Implemented |
 
-**Repository Contents**
+## Data Quality
 
-- 📄 Full SQL ETL Pipeline: [View SQL Code](https://github.com/puhan63/Medicare/blob/main/Medicare_SQL_Updated_Queries.sql)
-- 📊 Tableau Dashboards (State, Provider, Correlation)
-- 📁 Cleaned Analytical Data Marts
-- 📘 Data Documentation
-- 🧠 Feature Engineering Logic
+The ETL pipeline performs comprehensive data quality validation and standardization before records enter the analytical data marts. Rather than removing questionable data without explanation, the pipeline applies reproducible validation rules, preserves auditability, and ensures that downstream analyses are based on consistent, reliable data.
+
+### Validation and Cleaning Performed
+
+* Geographic validation to remove non-U.S. states, territories, military addresses, and invalid location codes
+* State, ZIP code, and FIPS code standardization across all datasets
+* Prescriber deduplication using National Provider Identifier (NPI) while retaining the record with the highest claims volume
+* Text standardization for provider names, specialties, and drug descriptions
+* Opioid prescribing rate validation by converting invalid values outside the expected 0–1 range to NULL while preserving the original records
+* Population normalization to enable fair comparisons across states of different sizes
+* Cross-dataset validation to ensure geographic consistency between prescriber, utilization, and opioid datasets
+
+## Data Quality Results
+
+| Validation Process         | Result                                    |
+| -------------------------- | ----------------------------------------- |
+| Geographic validation      | 9,268 invalid records removed             |
+| Prescriber deduplication   | 1,039,307 unique providers retained       |
+| Opioid rate validation     | 312,000+ invalid values corrected         |
+| State/FIPS standardization | Completed across all datasets             |
+| ETL audit logging          | Implemented for all major transformations |
+
+The cleaned and validated datasets were then transformed into analytics-ready data marts used directly by the Tableau dashboards and statistical analyses, eliminating the need for additional data preparation during reporting.
+
+📘 Additional implementation details, SQL logic, and transformation methodology are documented in Technical_Design.md.
+
+## Final Analytical Datasets
+
+The ETL pipeline produces four analytics-ready datasets designed specifically for business intelligence reporting and statistical analysis. Each dataset contains validated, standardized, and engineered features that require no additional data preparation before use in Tableau.
+
+### Final Outputs
+
+* tableau_state_dashboard — State-level dataset containing annual prescription utilization, opioid prescribing metrics, healthcare costs, provider counts, and population-normalized measures for all 50 states and the District of Columbia (561 rows).
+* tableau_provider_dashboard — Provider-level dataset containing more than 1 million deduplicated prescriber records with provider classifications, prescription utilization, opioid prescribing activity, beneficiary counts, and cost metrics.
+* tableau_state_correlation — Statistical summary dataset containing Pearson correlation coefficients that quantify relationships between statewide prescription volume, opioid utilization, healthcare costs, provider counts, and population-adjusted metrics.
+* tableau_provider_correlation — Statistical summary dataset measuring relationships between provider-level prescribing behavior, opioid utilization, beneficiary volume, total claims, drug costs, and patient complexity indicators.
+
+These analytical datasets serve as the direct data source for the Tableau dashboards and SQL-based statistical analyses, requiring no additional joins, cleaning, or transformation within the reporting layer.
 
 **Interactive Tableau Dashboards**
 
@@ -119,184 +186,11 @@ This project includes a multi-dashboard Tableau solution consisting of a landing
 
 ![Landing Page](https://github.com/puhan63/Medicare/blob/main/Project%20Overview.png)
 
-
-## Data Overview
-
-The project uses three large CMS datasets:
-
-        •	Prescriber-level Medicare Part D claims (~1.04M records) 
-        •	Drug utilization by geography (~115K records) 
-        •	Opioid prescribing rates by geography (~329K records) 
-
-All data was processed in a SQL-based ETL pipeline built from raw ingestion to final analytical marts.
-
-## Why This Project Matters
-
-	This project reflects a real-world healthcare analytics workflow:
-
-		•	Raw government healthcare data is messy and inconsistent 
-		•	Geographic and provider-level standardization is required before analysis 
-		•	Data quality issues must be tracked, not ignored 
-		•	Both system-level and provider-level views are necessary for meaningful insight 
-
-	The result is a structured, validated analytics pipeline that mirrors how healthcare data is prepared in production BI environments.
-
-## What This Project Demonstrates
-
-* End-to-end ETL design — built a production-style SQL pipeline that transforms raw CMS Medicare Part D datasets into clean, validated, analytics-ready data marts for business intelligence reporting.
-* Large-scale healthcare data processing — processed more than 1.4 million Medicare Part D records spanning 2013–2023, integrating multiple CMS datasets into a unified analytical model.
-* Data quality enforcement — implemented validation rules for geographic codes, opioid prescribing rates, duplicate providers, and standardized identifiers while preserving rejected records for auditability.
-* Real-world data cleaning patterns — normalized state names, ZIP codes, FIPS codes, provider specialties, and drug labels while correcting inconsistent and missing values commonly found in public healthcare datasets.
-* Provider deduplication using SQL — designed NPI-based deduplication logic to retain the most representative provider record, ensuring accurate provider-level reporting across more than one million prescribers.
-* Feature engineering for analytics — created population-adjusted utilization metrics, provider classifications, prescribing rates, and other derived fields to support meaningful comparisons across states and provider groups.
-* Population-normalized healthcare analytics — developed per-capita utilization measures that enable fair geographic comparisons independent of population size.
-* Statistical analysis in SQL — implemented Pearson correlation calculations directly in SQL to quantify relationships among prescription volume, drug cost, provider supply, patient complexity, and opioid utilization.
-* Business intelligence dashboard design — produced Tableau-ready analytical data marts powering interactive dashboards for state trends, provider behavior, opioid utilization, and statistical correlation analysis.
-* Healthcare reporting and decision support — translated complex Medicare Part D data into executive-level insights supporting public health monitoring, prescribing behavior analysis, and healthcare resource planning.
-
-**End-to-End Workflow**
-
-1. Data Ingestion
-
-        All datasets were loaded into SQL staging tables using bulk ingestion (LOAD DATA LOCAL INFILE) and preserved in raw form for reproducibility.
-
-2. Data Cleaning & Standardization (Major Focus Area)
-
-        A significant portion of the project focused on resolving real-world healthcare data issues:
-        
-        Geographic Cleaning
-
-                •	Removed invalid and non-U.S. geographic codes (PR, VI, GU, AE, AP, AA, etc.) 
-                •	Eliminated 9,268 invalid geographic records 
-                •	Stored rejected records separately for auditability 
-
-        Data Standardization
-
-                •	Normalized state codes, ZIP codes, and FIPS codes 
-                •	Standardized text fields (names, specialties, drug labels) 
-                •	Ensured consistent formatting across all datasets 
-
-        Numeric Validation
-
-                •	Removed invalid opioid prescribing rates (<0 or >1) 
-                •	Converted out-of-range values (~312K records) to NULL instead of deleting 
-                •	Preserved record structure while preventing analytical distortion 
-
-3. Prescriber Deduplication (NPI-Level Logic)
-
-        Prescriber data often contained multiple records per provider.
-        
-        A deduplication strategy was implemented:
-
-                •	Grouped by NPI 
-                •	Retained record with maximum total claims per provider 
-
-        Result:
-
-                •	1,039,307 unique prescriber records 
-
-4. Provider Classification (Healthcare Segmentation)
-
-        Prescribers were grouped into clinically meaningful categories:
-
-                •	PHYSICIAN 
-                •	ADVANCED_PRACTICE 
-                •	DENTAL 
-                •	PODIATRY / OPTOMETRY 
-                •	PHARMACY 
-                •	FACILITY / ORGANIZATIONAL PROVIDERS 
-                •	LOW_IMPACT_OTHER 
-                •	UNKNOWN 
-
-        This allowed downstream analysis of prescribing behavior by provider type rather than raw specialty text.
-
-5. Geographic Validation & Filtering
-
-        To ensure consistency in state-level reporting:
-
-                •	Only U.S. states were retained 
-                •	Territories and invalid regions were removed 
-                •	State-level drug and opioid datasets were aligned using FIPS mapping 
-
-**Key SQL Techniques**
-
-The complete SQL ETL pipeline can be viewed here:
-
-➡️ **[Full SQL Pipeline](https://github.com/puhan63/Medicare/blob/main/Medicare_SQL_Updated_Queries.sql)**
-
-***Prescriber Deduplication Using SQL***
-
-CMS source data occasionally contained duplicate NPI records. To preserve the most representative provider profile, the record with the highest claims volume was retained.
-
-```sql
-CREATE TABLE prescriber_clean AS
-SELECT r.*
-FROM raw_prescriber r
-JOIN (
-    SELECT
-        npi,
-        MAX(total_claims) AS max_claims
-    FROM raw_prescriber
-    GROUP BY npi
-) m
-ON r.npi = m.npi
-AND r.total_claims = m.max_claims;
-```
-
-***Population-Normalized State Metrics***
-
-To support fair state comparisons, opioid utilization and provider counts were normalized by population.
-
-```sql
-CAST(o.opioid_claims AS DECIMAL(18,4))
-    / NULLIF(p.population, 0) * 1000
-    AS opioid_claims_per_1000,
-
-CAST(o.total_prescribers AS DECIMAL(18,4))
-    / NULLIF(p.population, 0) * 1000
-    AS prescribers_per_1000
-```
-
-***Pearson Correlation Analysis in SQL***
-
-Relationships between prescribing volume, cost, and patient complexity were calculated directly in SQL using Pearson correlation coefficients.
-
-```sql
-(AVG(total_claims * total_drug_cost)
- - AVG(total_claims) * AVG(total_drug_cost))
-/
-NULLIF(
-    STDDEV(total_claims)
-    * STDDEV(total_drug_cost),
-0)
-AS corr_claims_cost
-```
 **State-Level Dataset (Executive View)**
 
 **State-Level Dashboard**
 
 ![State Dashboard](https://github.com/puhan63/Medicare/blob/main/Medicare%20Part%20D%20and%20Opioid%20Utilization%20Trends.png)
-
-This dashboard explores prescription utilization, opioid prescribing rates, population-adjusted metrics, and geographic variation across all U.S. states.
-
-		tableau_dataset
-
-			 •	561 rows (51 states × 11 years)
-
-				Contains:
-
-				•	Total claims 
-                •	Opioid claims
-				•	Population-adjusted metrics 
-                •	Cost and utilization measures
-				
-
-				Used for:
-
-                •	State comparisons
-				•	Trend analysis
-                •	Public health reporting
-				•	Geographic opioid analysis
 
 **Provider-Level Dataset (Clinical Behavior View)**
 
@@ -304,62 +198,11 @@ This dashboard explores prescription utilization, opioid prescribing rates, popu
 
 ![Provider Dashboard](https://github.com/puhan63/Medicare/blob/main/Prescriber%20Workforce%20and%20Healthcare%20Utilization.png)
 
-This dashboard examines prescribing behavior across provider groups, opioid utilization patterns, and high-volume prescribers.
-
-        tableau_prescriber_dataset
-
-                •	1,039,307 prescriber records 
-
-				Contains: 
-
-                •	Total claims per provider 
-                •	Opioid claims 
-                •	Prescriber group classification 
-                •	Risk score relationships 
-                •	Cost and utilization metrics 
-
-		        Used for:
-
-                •	Provider segmentation 
-                •	High-risk prescribing analysis 
-                •	Specialty comparisons 
-                •	Behavioral pattern analysis 
-
 **Statistical Analysis Layer**
 
 **Correlation Analysis Dashboard**
 
 ![Correlation Dashboard](https://github.com/puhan63/Medicare/blob/main/Drivers%20of%20Medicare%20Utilization%20and%20Opioid%20Prescribing.png)
-
-This dashboard visualizes relationships between claims volume, cost, provider counts, risk scores, and opioid prescribing activity.
-
-        State Correlation Matrix
-
-                •	Claims vs Cost 
-                •	Claims vs Prescribers 
-                •	Opioid Claims vs Opioid Prescribers 
-
-        Provider Correlation Matrix
-
-                •	Claims vs Cost 
-                •	Claims vs Beneficiaries 
-                •	Opioid Claims vs Total Claims 
-                •	Risk Score vs Claims 
-                •	Risk Score vs Opioid Claims 
-
-        These outputs quantify relationships between healthcare utilization, cost, and prescribing behavior.
-
-**ETL Governance & Auditability**
-
-        An ETL audit logging system was implemented to track all major transformations:
-        
-        Tracked:
-
-                •	Records removed due to invalid geography 
-                •	Deduplication outcomes 
-                •	Cleaning operations affecting numeric fields 
-
-        This ensures full transparency and reproducibility of all transformations.
 
 **Key Findings (High-Level Insights)**
 
@@ -406,3 +249,11 @@ ________________________________________
 	•	County-level geographic expansion 
 	•	Integration of socioeconomic and demographic data 
 	•	Anomaly detection for unusual prescribing patterns
+
+## Repository Contents
+
+- 📄 Full SQL ETL Pipeline: [View SQL Code](https://github.com/puhan63/Medicare/blob/main/Medicare_SQL_Updated_Queries.sql)
+- 📊 Tableau Dashboards (State, Provider, Correlation)
+- 📁 Cleaned Analytical Data Marts
+- 📘 Data Documentation
+- 🧠 Feature Engineering Logic
