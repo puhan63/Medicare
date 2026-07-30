@@ -18,7 +18,12 @@ The final output supports two levels of analysis:
         •	System-level trends (state and national healthcare patterns)  
         •	Provider-level behavior (individual prescriber activity and risk patterns) 
 
-**Key Questions This Project Answers:**
+## Tech Stack
+
+- **MySQL Workbench 8.0** — SQL ETL pipeline, data validation, feature engineering, statistical analysis, and analytical data marts.
+- **Tableau Public** — Interactive dashboards for state-level, provider-level, and correlation analysis.
+
+## Key Questions This Project Answers:
 
         •	How has overall prescription activity changed from 2013–2023? 
         •	Are opioid prescriptions increasing or decoupling from total prescribing trends? 
@@ -27,7 +32,7 @@ The final output supports two levels of analysis:
         •	What drives prescription volume more: patient population, provider count, or cost? 
         •	Is opioid prescribing more strongly linked to system scale or provider behavior? 
 
-**Project Architecture**
+## Project Architecture
 
 CMS Medicare Part D Files
        
@@ -115,7 +120,7 @@ This project includes a multi-dashboard Tableau solution consisting of a landing
 ![Landing Page](https://github.com/puhan63/Medicare/blob/main/Project%20Overview.png)
 
 
-**Data Overview**
+## Data Overview
 
 The project uses three large CMS datasets:
 
@@ -124,6 +129,30 @@ The project uses three large CMS datasets:
         •	Opioid prescribing rates by geography (~329K records) 
 
 All data was processed in a SQL-based ETL pipeline built from raw ingestion to final analytical marts.
+
+## Why This Project Matters
+
+	This project reflects a real-world healthcare analytics workflow:
+
+		•	Raw government healthcare data is messy and inconsistent 
+		•	Geographic and provider-level standardization is required before analysis 
+		•	Data quality issues must be tracked, not ignored 
+		•	Both system-level and provider-level views are necessary for meaningful insight 
+
+	The result is a structured, validated analytics pipeline that mirrors how healthcare data is prepared in production BI environments.
+
+## What This Project Demonstrates
+
+* End-to-end ETL design — built a production-style SQL pipeline that transforms raw CMS Medicare Part D datasets into clean, validated, analytics-ready data marts for business intelligence reporting.
+* Large-scale healthcare data processing — processed more than 1.4 million Medicare Part D records spanning 2013–2023, integrating multiple CMS datasets into a unified analytical model.
+* Data quality enforcement — implemented validation rules for geographic codes, opioid prescribing rates, duplicate providers, and standardized identifiers while preserving rejected records for auditability.
+* Real-world data cleaning patterns — normalized state names, ZIP codes, FIPS codes, provider specialties, and drug labels while correcting inconsistent and missing values commonly found in public healthcare datasets.
+* Provider deduplication using SQL — designed NPI-based deduplication logic to retain the most representative provider record, ensuring accurate provider-level reporting across more than one million prescribers.
+* Feature engineering for analytics — created population-adjusted utilization metrics, provider classifications, prescribing rates, and other derived fields to support meaningful comparisons across states and provider groups.
+* Population-normalized healthcare analytics — developed per-capita utilization measures that enable fair geographic comparisons independent of population size.
+* Statistical analysis in SQL — implemented Pearson correlation calculations directly in SQL to quantify relationships among prescription volume, drug cost, provider supply, patient complexity, and opioid utilization.
+* Business intelligence dashboard design — produced Tableau-ready analytical data marts powering interactive dashboards for state trends, provider behavior, opioid utilization, and statistical correlation analysis.
+* Healthcare reporting and decision support — translated complex Medicare Part D data into executive-level insights supporting public health monitoring, prescribing behavior analysis, and healthcare resource planning.
 
 **End-to-End Workflow**
 
@@ -369,26 +398,6 @@ ________________________________________
 		•	Cost and claims trends 
 		•	Provider segmentation 
 		•	Risk-based prescribing analysis 
-
-**Tools & Techniques**
-
-	•	MySQL (ETL + analysis) 
-	•	Window functions (deduplication, ranking) 
-	•	Aggregations and joins 
-	•	Data validation rules 
-	•	Correlation analysis (SQL-based Pearson calculations) 
-	•	Tableau (final visualization layer) 
-
-**Why This Project Matters**
-
-	This project reflects a real-world healthcare analytics workflow:
-
-		•	Raw government healthcare data is messy and inconsistent 
-		•	Geographic and provider-level standardization is required before analysis 
-		•	Data quality issues must be tracked, not ignored 
-		•	Both system-level and provider-level views are necessary for meaningful insight 
-
-	The result is a structured, validated analytics pipeline that mirrors how healthcare data is prepared in production BI environments.
 
 **Future Enhancements**
 
