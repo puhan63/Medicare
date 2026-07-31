@@ -68,47 +68,51 @@ The result is a structured, validated analytics pipeline that mirrors how health
 
 ## Project Architecture
 
-CMS Medicare Part D Files
-       
-		│
-        ▼
-  
-  SQL Staging Tables
-        
-		│
-        ▼
+The project follows a modular SQL-based ETL architecture that transforms raw CMS Medicare Part D data into validated, analytics-ready datasets for Tableau reporting and statistical analysis. The pipeline separates data ingestion, validation, cleaning, feature engineering, analytical modeling, and reporting into distinct stages, making the workflow easier to maintain, audit, and extend.
 
-Data Cleaning & Validation
-        
-		│
-        ▼
- 
- Geographic Filtering
-        
-		│
-        ▼
- 
- Prescriber Deduplication
-        
-		│
-        ▼
- 
- Provider Classification
-        
-		│
-        ▼
- 
- Analytical Data Marts
-        
-		│
-        ├──────────────► State Dashboard Dataset
-        │
-        ├──────────────► Provider Dashboard Dataset
-        │
-        └──────────────► Correlation Analysis Dataset
-                                │
-                                ▼
-                         Tableau Dashboards
+```text
+                 CMS Medicare Part D Source Files
+      (Prescribers, Drug Utilization, Opioid Trends)
+                           │
+                           ▼
+                  SQL Staging Tables
+                           │
+                           ▼
+             Data Validation & Quality Checks
+                           │
+                           ▼
+          Cleaning & Standardization
+                           │
+                           ▼
+           Geographic Normalization
+                           │
+                           ▼
+            Prescriber Deduplication
+                           │
+                           ▼
+             Provider Classification
+                           │
+                           ▼
+            Feature Engineering
+                           │
+                           ▼
+               Analytical Data Marts
+                           │
+          ┌────────────────┼────────────────┐
+          │                │                │
+          ▼                ▼                ▼
+ State Dashboard     Provider Dashboard   Correlation Datasets
+     Dataset              Dataset
+          │                │                │
+          └────────────────┼────────────────┘
+                           │
+                           ▼
+             Interactive Tableau Dashboards
+```
+
+The ETL pipeline produces four analytics-ready datasets that support interactive Tableau dashboards for state-level prescription trends, provider performance, opioid utilization, and statistical correlation analysis. Because the datasets are fully validated, standardized, and feature engineered within SQL, no additional data preparation is required in the reporting layer.
+
+📘 **For detailed technical documentation—including the ETL architecture, validation framework, SQL implementation, feature engineering, statistical methodology, dashboard design, and database optimization—see [Technical_Design.md](Technical_Design.md).**
 
 ## Project Scale
 
