@@ -124,7 +124,7 @@ Data Cleaning & Validation
 | Final Tableau Datasets | 4 |
 | Unique Prescribers (NPI) | 1,039,307 |
 
-### Data Quality Improvements
+### Validation Results
 
 | Validation Step | Result |
 |-----------------|---------|
@@ -175,6 +175,85 @@ The ETL pipeline produces four analytics-ready datasets designed specifically fo
 
 These analytical datasets serve as the direct data source for the Tableau dashboards and SQL-based statistical analyses, requiring no additional joins, cleaning, or transformation within the reporting layer.
 
+
+## Technical Design Documentation
+
+Detailed technical documentation describing the design and implementation of the ETL pipeline is available in Technical_Design.md.
+
+The document includes:
+
+* ETL architecture and workflow
+* Data ingestion strategy
+* Data validation and quality framework
+* Cleaning and standardization methodology
+* Prescriber deduplication logic
+* Feature engineering and provider classification
+* Statistical analysis methodology
+* Tableau dashboard design
+* SQL implementation details and design decisions
+* Database indexing and performance considerations
+
+📘 Technical_Design.md
+
+## SQL Pipeline
+
+The complete SQL ETL pipeline that powers this project is available here:
+
+📄 Medicare_Part_D_ETL.sql
+
+The pipeline performs:
+
+- Bulk ingestion of CMS Medicare Part D source files into SQL staging tables
+- Data cleaning, validation, and standardization
+- Geographic filtering and normalization of state, ZIP code, and FIPS data
+- Prescriber deduplication using National Provider Identifier (NPI)
+- Provider classification into clinically meaningful groups
+- Population-normalized metric calculations for state-level comparisons
+- Feature engineering for business intelligence reporting
+- Statistical analysis using SQL-based Pearson correlation calculations
+- Creation of analytics-ready data marts for Tableau dashboards
+- ETL audit logging to support data quality tracking and reproducibility
+
+## SQL Analysis
+
+The investigative SQL queries used to validate ETL results, verify business rules, analyze data quality issues, and perform statistical correlation analysis are available here:
+
+📄 **[Medicare_Part_D_SQL_Analysis.sql](https://github.com/puhan63/Medicare-Part-D/blob/main/Medicare_Part_D_SQL_Analysis.sql)**
+
+The analysis script includes:
+
+- Data quality verification
+- Geographic validation analysis
+- Prescriber deduplication verification
+- Opioid prescribing trend analysis
+- Population-normalized state comparisons
+- Provider utilization analysis
+- Pearson correlation calculations
+- Validation of analytical data marts
+
+## Statistical Correlation Analysis
+
+In addition to building analytics-ready datasets, this project performs statistical analysis directly within SQL to quantify relationships between healthcare utilization, prescribing behavior, provider characteristics, and drug costs.
+
+Pearson correlation coefficients were calculated using SQL aggregate functions to measure the strength and direction of relationships between key healthcare metrics at both the state and provider levels.
+
+The analysis investigates questions such as:
+
+- How strongly prescription volume is associated with total drug cost
+- Whether opioid prescribing increases proportionally with overall prescribing activity
+- The relationship between provider supply and prescription utilization
+- How beneficiary volume influences prescribing behavior
+- Whether patient complexity is associated with higher prescribing activity
+
+The statistical results are stored in dedicated analytical datasets that feed the Tableau correlation dashboards:
+
+- `tableau_state_correlation`
+- `tableau_provider_correlation`
+
+These datasets provide quantitative evidence supporting the business insights presented throughout the project and demonstrate how SQL can be used for both data engineering and statistical analysis within a healthcare analytics workflow.
+
+📘 **Additional details, SQL implementation, mathematical methodology, and interpretation of the correlation analyses are documented in [Technical_Design.md](Technical_Design.md).**
+
 **Interactive Tableau Dashboards**
 
 This project includes a multi-dashboard Tableau solution consisting of a landing page and three analytical dashboards. The dashboards allow users to explore Medicare Part D utilization patterns at both the state and provider levels.
@@ -204,45 +283,38 @@ This project includes a multi-dashboard Tableau solution consisting of a landing
 
 ![Correlation Dashboard](https://github.com/puhan63/Medicare/blob/main/Drivers%20of%20Medicare%20Utilization%20and%20Opioid%20Prescribing.png)
 
-**Key Findings (High-Level Insights)**
+## Key Findings (High-Level Insights)
 
-1. Prescription Volume Drives Cost
-States and providers with higher claim volumes consistently show higher drug costs, indicating that utilization is the primary cost driver in Medicare Part D.
-________________________________________
+***Answers to the key questions above, based on the dashboard results:***
 
-2. Opioid Prescribing Is Declining Relative to Total Claims
-While overall prescription activity has increased over time, opioid claims have declined relative to total utilization, indicating a structural shift in prescribing behavior post-2016.
-________________________________________
+* Prescription volume is the primary driver of Medicare Part D spending — States and provider groups with the highest prescription volumes consistently generated the highest total drug costs, indicating that utilization, rather than unusually expensive prescriptions, is the dominant contributor to overall spending.
+* Opioid prescribing has declined relative to overall Medicare Part D utilization — Although total prescription activity increased across the 2013–2023 study period, opioid prescribing represented a progressively smaller share of total prescriptions, reflecting long-term changes in prescribing practices following national opioid stewardship initiatives.
+* Population-adjusted metrics reveal meaningful geographic differences — Normalizing prescription activity by state population identified states with disproportionately high opioid utilization that were not necessarily those with the highest raw prescription volumes, demonstrating the importance of per-capita analysis for fair geographic comparisons.
+* Provider supply is strongly associated with prescription utilization — States with larger prescriber workforces consistently generated higher prescription volumes, suggesting that healthcare system capacity is a major contributor to utilization patterns.
+* Provider prescribing behavior is closely tied to overall prescribing intensity — High-volume prescribers generally wrote more opioid prescriptions as well, indicating that opioid utilization is more strongly associated with overall prescribing activity than with isolated provider behavior.
+* SQL-based correlation analysis quantified relationships across healthcare utilization metrics — Pearson correlation calculations performed directly in SQL demonstrated measurable relationships among prescription volume, drug costs, beneficiary counts, provider supply, and opioid prescribing, providing statistical evidence to support the dashboard findings.
 
-3. Provider Capacity Strongly Influences Utilization
-Higher prescriber counts are strongly associated with increased claim volume, suggesting that system capacity is a key driver of healthcare utilization.
-________________________________________
+## Detailed Dashboard Insights
 
-4. Opioid Activity Is Linked to Overall Prescribing Behavior
-Opioid claims scale with total claims, suggesting opioid prescribing is more reflective of general prescribing intensity than isolated provider behavior.
-________________________________________
+### State Utilization Dashboard
 
-5. Patient Complexity Matters
-Risk score correlations show that higher patient complexity is associated with increased prescribing activity, including opioid utilization.
-________________________________________
+- Prescription utilization increased steadily across the 2013–2023 study period.
+- Population-adjusted opioid prescribing varied considerably across states, highlighting geographic differences that are less visible in raw prescription counts.
+- Total drug costs closely tracked overall prescription volume, reinforcing utilization as the primary spending driver.
 
-**Tableau Dashboards**
+### Provider Performance Dashboard
 
-	This project produces four Tableau-ready datasets:
+- Prescription activity differed substantially across provider classifications, with physician groups accounting for the majority of Medicare Part D claims.
+- High-volume prescribers also tended to generate higher opioid prescription counts, although prescribing intensity varied by provider group.
+- Provider classification simplified thousands of specialty descriptions into clinically meaningful categories for downstream analysis.
 
-		•	State-level dashboard (561 rows) → trends, geography, population-adjusted analysis 
-		•	Provider-level dashboard (1M+ rows) → behavioral and specialty analysis 
-		•	State correlation matrix (3 rows) → system-level relationships 
-		•	Provider correlation matrix (5 rows) → clinical behavior drivers 
+### Statistical Correlation Dashboard
 
-	These support interactive dashboards for:
+- Strong positive relationships were observed between prescription volume and total drug cost.
+- Provider supply was positively associated with overall prescription utilization.
+- Beneficiary volume, prescription activity, and opioid utilization demonstrated measurable statistical relationships that support the project's healthcare utilization findings.
 
-		•	Opioid utilization mapping 
-		•	Cost and claims trends 
-		•	Provider segmentation 
-		•	Risk-based prescribing analysis 
-
-**Future Enhancements**
+## Future Enhancements
 
 	•	Predictive modeling for high-risk prescribers 
 	•	Time-series forecasting for opioid utilization trends 
@@ -250,10 +322,27 @@ ________________________________________
 	•	Integration of socioeconomic and demographic data 
 	•	Anomaly detection for unusual prescribing patterns
 
+## Requirements
+
+- MySQL Workbench 8.0
+- CMS Medicare Part D source files (2013–2023)
+- Tableau Public (optional, for viewing and recreating the dashboards)
+
+## How To Run
+
+1. Set up a MySQL Workbench 8.0 environment and ensure `local_infile` is enabled for bulk data loading.
+2. Clone this repository and update the file paths in the `LOAD DATA LOCAL INFILE` statements so they point to your local copies of the CMS Medicare Part D source files.
+3. Run `Medicare_Part_D_ETL.sql` from beginning to end. The script performs the complete ETL workflow, including raw data ingestion, validation, cleaning, standardization, feature engineering, provider deduplication, analytical data mart creation, and ETL audit logging.
+4. Query the final analytical datasets directly, or connect Tableau Public (or another BI tool) to the completed data marts for interactive reporting.
+5. Optionally, run `Medicare_Part_D_SQL_Analysis.sql` to review the investigative SQL queries used to validate ETL results, verify business rules, analyze data quality, and reproduce the statistical correlation analyses presented in the dashboards.
+
 ## Repository Contents
 
-- 📄 Full SQL ETL Pipeline: [View SQL Code](https://github.com/puhan63/Medicare/blob/main/Medicare_SQL_Updated_Queries.sql)
-- 📊 Tableau Dashboards (State, Provider, Correlation)
-- 📁 Cleaned Analytical Data Marts
-- 📘 Data Documentation
-- 🧠 Feature Engineering Logic
+| File                             | Description                                                                         |
+| -------------------------------- | ----------------------------------------------------------------------------------- |
+| README.md                        | Project overview, architecture, dashboard previews, setup instructions              |
+| Technical_Design.md              | ETL architecture, validation framework, SQL implementation, dashboard documentation |
+| Medicare_Part_D_ETL.sql          | Complete SQL ETL pipeline                                                           |
+| Medicare_Part_D_SQL_Analysis.sql | Read-only SQL analysis and validation queries                                       |
+| Tableau Workbook                 | Interactive dashboards                                                              |
+| Analytical Data Marts            | Final Tableau-ready datasets                                                        |
