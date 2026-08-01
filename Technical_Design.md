@@ -420,17 +420,22 @@ The completed feature engineering process produced analytics-ready datasets requ
 
 As a result, dashboard development focused entirely on visualization and business interpretation rather than data preparation, closely mirroring production business intelligence workflows used in healthcare organizations.
 
-**Key SQL Techniques**
+## SQL Implementation Highlights
 
-The complete SQL ETL pipeline can be viewed here:
+The complete SQL ETL pipeline that powers this project is available here:
 
-➡️ **[Full SQL Pipeline](https://github.com/puhan63/Medicare/blob/main/Medicare_SQL_Updated_Queries.sql)**
+➡️ Medicare_Part_D_ETL.sql
 
-***Prescriber Deduplication Using SQL***
+The pipeline consists of several thousand lines of SQL implementing bulk data ingestion, validation, cleaning, standardization, feature engineering, analytical data mart creation, statistical analysis, and ETL audit logging.
 
-CMS source data occasionally contained duplicate NPI records. To preserve the most representative provider profile, the record with the highest claims volume was retained.
+The examples below highlight several representative SQL techniques used throughout the project.
 
-```sql
+### Prescriber Deduplication
+
+CMS source files occasionally contained multiple records for the same National Provider Identifier (NPI). To produce one analytical record per provider, the ETL pipeline grouped records by NPI and retained the record with the highest prescription volume.
+
+Representative SQL:
+
 CREATE TABLE prescriber_clean AS
 SELECT r.*
 FROM raw_prescriber r
@@ -443,13 +448,15 @@ JOIN (
 ) m
 ON r.npi = m.npi
 AND r.total_claims = m.max_claims;
-```
 
-***Population-Normalized State Metrics***
+This approach creates a single representative provider profile while preserving the highest-volume prescribing record for downstream analysis.
 
-To support fair state comparisons, opioid utilization and provider counts were normalized by population.
+### Population-Normalized Healthcare Metrics
 
-```sql
+Raw prescription counts can be misleading because states differ substantially in population size. To support meaningful comparisons, the ETL pipeline calculated population-adjusted utilization measures during data transformation.
+
+Representative SQL:
+
 CAST(o.opioid_claims AS DECIMAL(18,4))
     / NULLIF(p.population, 0) * 1000
     AS opioid_claims_per_1000,
@@ -457,13 +464,59 @@ CAST(o.opioid_claims AS DECIMAL(18,4))
 CAST(o.total_prescribers AS DECIMAL(18,4))
     / NULLIF(p.population, 0) * 1000
     AS prescribers_per_1000
-```
 
-***Pearson Correlation Analysis in SQL***
+Using NULLIF() prevents division-by-zero errors while generating standardized per-capita healthcare metrics that can be compared fairly across all states.
 
-Relationships between prescribing volume, cost, and patient complexity were calculated directly in SQL using Pearson correlation coefficients.
+## Statistical Analysis
 
-```sql
+Beyond data engineering and business intelligence reporting, this project performs statistical analysis directly within MySQL to quantify relationships among key Medicare Part D utilization metrics.
+
+Rather than relying solely on visual interpretation of dashboard trends, the ETL pipeline calculates Pearson correlation coefficients using SQL aggregate functions. These statistical measures provide quantitative evidence supporting the relationships observed throughout the analysis.
+
+The statistical layer demonstrates how SQL can be used not only for data preparation, but also for exploratory and analytical modeling within a healthcare analytics workflow.
+
+### Analytical Objectives
+
+The statistical analysis was designed to answer questions such as:
+
+* How strongly is prescription volume associated with total drug cost?
+* Does opioid prescribing increase proportionally with overall prescribing activity?
+* Is healthcare utilization more closely associated with provider supply or patient population?
+* Do higher beneficiary counts correspond to greater prescribing activity?
+* Which healthcare metrics demonstrate the strongest statistical relationships?
+
+These analyses complement the Tableau dashboards by providing numerical evidence for observed healthcare utilization patterns.
+
+### Pearson Correlation Analysis
+
+Pearson correlation coefficients were calculated directly within SQL using aggregate statistical functions.
+
+The calculations measure the strength and direction of linear relationships between healthcare variables.
+
+Representative analyses include:
+
+* Total prescription volume vs. total drug cost
+* Total prescription volume vs. provider count
+* Total prescription volume vs. beneficiary count
+* Opioid prescription volume vs. total prescription volume
+* Opioid prescription volume vs. opioid prescriber count
+
+The resulting coefficients range from −1 to +1, where:
+
+| Correlation | Interpretation                |
+| ----------- | ----------------------------- |
+| **+1.0**    | Perfect positive relationship |
+| **0.0**     | No linear relationship        |
+| **−1.0**    | Perfect negative relationship |
+
+These values provide an objective measure of how closely healthcare utilization metrics move together.
+
+### SQL Implementation
+
+Rather than exporting data to statistical software, correlation coefficients were calculated directly within MySQL using aggregate functions.
+
+Representative SQL:
+
 (AVG(total_claims * total_drug_cost)
  - AVG(total_claims) * AVG(total_drug_cost))
 /
@@ -472,82 +525,169 @@ NULLIF(
     * STDDEV(total_drug_cost),
 0)
 AS corr_claims_cost
-```
 
-**State-Level Dataset (Executive View)**
+Using SQL for statistical calculations keeps the analytical workflow entirely within the database environment while ensuring the results remain reproducible and transparent.
 
-This dashboard explores prescription utilization, opioid prescribing rates, population-adjusted metrics, and geographic variation across all U.S. states.
+### Statistical Output Datasets
 
-		tableau_dataset
+The ETL pipeline generates dedicated datasets containing the calculated correlation coefficients.
 
-			 •	561 rows (51 states × 11 years)
+These include:
 
-				Contains:
+**tableau_state_correlation**
 
-				•	Total claims 
-        •	Opioid claims
-				•	Population-adjusted metrics 
-        •	Cost and utilization measures
-				
+State-level statistical relationships among:
 
-				Used for:
+* Prescription volume
+* Drug cost
+* Provider counts
+* Opioid utilization
+* Population-adjusted utilization measures
 
-        •	State comparisons
-				•	Trend analysis
-        •	Public health reporting
-				•	Geographic opioid analysis
+**tableau_provider_correlation**
 
-  **Provider-Level Dataset (Clinical Behavior View)**
+Provider-level statistical relationships among:
 
-  This dashboard examines prescribing behavior across provider groups, opioid utilization patterns, and high-volume prescribers.
+* Total claims
+* Drug cost
+* Beneficiary count
+* Opioid claims
+* Overall prescribing activity
 
-        tableau_prescriber_dataset
+These datasets are consumed directly by Tableau to visualize the strength of relationships across multiple healthcare measures.
 
-                •	1,039,307 prescriber records 
+### Interpretation
 
-				Contains: 
+The statistical analysis supports several of the project's primary findings.
 
-                •	Total claims per provider 
-                •	Opioid claims 
-                •	Prescriber group classification 
-                •	Risk score relationships 
-                •	Cost and utilization metrics 
+Examples include:
 
-		        Used for:
+* Higher prescription volume is strongly associated with increased drug spending.
+* Opioid prescribing generally scales with overall prescribing activity rather than occurring independently.
+* Provider availability contributes to differences in healthcare utilization across geographic regions.
+* Beneficiary volume is positively associated with prescription activity.
 
-                •	Provider segmentation 
-                •	High-risk prescribing analysis 
-                •	Specialty comparisons 
-                •	Behavioral pattern analysis
+These findings complement the dashboard visualizations by providing quantitative evidence for observed utilization patterns.
 
-  **Statistical Analysis Layer**
+### Role Within the ETL Pipeline
 
-  This dashboard visualizes relationships between claims volume, cost, provider counts, risk scores, and opioid prescribing activity.
+The statistical analysis represents the final analytical stage of the pipeline.
 
-        State Correlation Matrix
+The workflow proceeds through:
 
-                •	Claims vs Cost 
-                •	Claims vs Prescribers 
-                •	Opioid Claims vs Opioid Prescribers 
+* Data ingestion
+* Validation
+* Cleaning and standardization
+* Feature engineering
+* Analytical data mart creation
+* Statistical analysis
+* Tableau visualization
 
-        Provider Correlation Matrix
+Performing the statistical calculations after the analytical datasets have been fully validated ensures that the reported relationships are based on consistent, standardized, and high-quality data.
 
-                •	Claims vs Cost 
-                •	Claims vs Beneficiaries 
-                •	Opioid Claims vs Total Claims 
-                •	Risk Score vs Claims 
-                •	Risk Score vs Opioid Claims 
+### Additional SQL Techniques Used
 
-        These outputs quantify relationships between healthcare utilization, cost, and prescribing behavior.
+Beyond the examples shown above, the ETL pipeline incorporates a variety of SQL techniques commonly used in healthcare data engineering projects, including:
 
-  **ETL Governance & Auditability**
+* Bulk data ingestion using LOAD DATA LOCAL INFILE
+* Multi-table joins for integrating CMS datasets
+* Aggregate functions for healthcare utilization metrics
+* Conditional logic using CASE expressions
+* Common Table Expressions (CTEs)
+* Window functions for ranking and analytical calculations
+* Population normalization using demographic reference data
+* Data validation and quality checks
+* Feature engineering for business intelligence reporting
+* Analytical data mart creation optimized for Tableau
+* ETL audit logging for transformation tracking and reproducibility
 
-        An ETL audit logging system was implemented to track all major transformations:
-        
-        Tracked:
+## Tableau Dashboard Design
 
-                •	Records removed due to invalid geography 
-                •	Deduplication outcomes 
-                •	Cleaning operations affecting numeric fields 
+The final analytical datasets produced by the SQL ETL pipeline power an interactive Tableau workbook consisting of a landing page and three analytical dashboards. Each dashboard is designed for a different level of analysis while using a common set of validated business rules, standardized measures, and engineered features generated during the ETL process.
+ 
+### Dashboard 1 — Project Overview (Landing Page)
 
-        This ensures full transparency and reproducibility of all transformations.
+The landing page serves as the navigation hub for the Tableau workbook and provides users with an overview of the project before exploring the analytical dashboards.
+
+The landing page includes:
+
+* Project summary
+* Navigation buttons
+* Dashboard descriptions
+* Instructions for exploring the workbook
+
+This page improves usability by allowing users to move easily between the analytical dashboards while providing context for the overall project.
+  
+### Dashboard 2 — State-Level Prescription & Opioid Utilization Analysis
+
+This dashboard explores Medicare Part D prescribing patterns across all U.S. states and the District of Columbia between 2013 and 2023.
+
+The dashboard supports analysis of:
+
+* Total prescription volume
+* Opioid prescribing trends
+* Population-adjusted utilization rates
+* Healthcare spending
+* Geographic variation
+* State-to-state comparisons
+* Longitudinal prescribing trends
+
+Primary data source:
+
+* tableau_state_dashboard
+
+This dataset contains approximately 561 records (51 geographic regions across 11 years) and provides an executive-level view of nationwide prescribing behavior.
+
+### Dashboard 3 — Provider Workforce & Prescribing Behavior
+
+This dashboard focuses on provider-level prescribing activity using more than one million deduplicated Medicare Part D prescribers.
+
+The dashboard allows users to analyze:
+
+* Provider specialty groups
+* Prescription volume
+* Opioid prescribing activity
+* Drug costs
+* Beneficiary counts
+* High-volume prescribers
+* Provider segmentation
+
+Primary data source:
+
+* tableau_provider_dashboard
+
+This dataset contains more than 1.03 million unique providers, supporting detailed analysis of prescribing behavior across provider types.
+
+### Dashboard 4 — Statistical Correlation Analysis
+
+This dashboard visualizes statistical relationships calculated directly within SQL using Pearson correlation coefficients.
+
+The dashboard explores relationships between:
+
+* Prescription volume and total drug cost
+* Prescription volume and provider supply
+* Opioid claims and total claims
+* Beneficiary volume and prescribing activity
+* Patient complexity and prescription utilization
+
+Primary data sources:
+
+* tableau_state_correlation
+* tableau_provider_correlation
+
+Unlike the other dashboards, this dashboard focuses on explaining why utilization patterns occur by quantifying relationships among key healthcare metrics.
+
+### Dashboard Design Principles
+
+The Tableau dashboards were designed to support both executive reporting and detailed healthcare analytics.
+
+Key design principles include:
+
+* Consistent color palette and visual styling
+* Interactive filtering across dashboards
+* Population-normalized metrics for fair geographic comparisons
+* Clinically meaningful provider classifications
+* Clear separation between state-level and provider-level analyses
+* Dashboard layouts optimized for rapid interpretation of healthcare utilization patterns
+
+Because all business rules, feature engineering, and statistical calculations are performed within the SQL ETL pipeline, the Tableau workbook functions primarily as a visualization layer without requiring additional data preparation.
