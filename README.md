@@ -350,3 +350,19 @@ This project includes a multi-dashboard Tableau solution consisting of a landing
 | Medicare_Part_D_SQL_Analysis.sql | Read-only SQL analysis and validation queries                                       |
 | Tableau Workbook                 | Interactive dashboards                                                              |
 | Analytical Data Marts            | Final Tableau-ready datasets                                                        |
+
+## About the Author
+
+Patricia Uhan, M.S.
+
+I hold a Master's degree in Clinical Psychology and have spent my career in healthcare as a mental health therapist and psychometrist, administering and scoring standardized assessments, analyzing longitudinal client outcome data, and translating findings into evidence-based clinical insights and decisions.
+
+That background shaped my interest in healthcare analytics. This project analyzes publicly available Medicare Part D data from the Centers for Medicare & Medicaid Services (CMS), demonstrating how large-scale healthcare datasets can be transformed into analytics-ready information through SQL-based ETL, feature engineering, statistical analysis, and business intelligence reporting. My clinical experience informs both the analytical approach and the interpretation of the healthcare utilization patterns presented throughout the project.
+
+I'm now transitioning into healthcare data analytics, applying the same evidence-based, detail-oriented approach to SQL, Python, and Tableau. This project is one of two healthcare analytics projects in my GitHub portfolio. My other project focuses on designing a production-style SQL ETL pipeline for behavioral health claims data, emphasizing data quality validation, feature engineering, and interactive dashboard development. I'm currently seeking my first Healthcare Data Analyst role, where I can combine my clinical expertise with data analytics to support better healthcare decision-making.
+
+📫 Let's connect:
+
+LinkedIn: https://www.linkedin.com/in/patricia-uhan
+Email: uhanpatricia@gmail.com
+GitHub: https://github.com/puhan63
