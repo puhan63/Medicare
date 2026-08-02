@@ -69,6 +69,53 @@ The pipeline separates data ingestion, validation, cleaning, feature engineering
           Interactive Tableau Public Dashboards
 ```
 
+The architecture emphasizes modular ETL design by separating ingestion, validation, transformation, feature engineering, analytical data mart creation, and statistical processing into independent stages. This approach improves maintainability, simplifies debugging, enhances auditability, and produces consistent analytics-ready datasets optimized for Tableau reporting.
+
+## Data Flow
+
+The ETL pipeline processes Medicare Part D data through a series of structured transformations that progressively improve data quality and analytical value. Raw CMS datasets are first loaded into staging tables, where validation rules identify incomplete, inconsistent, and invalid records. After validation, the data undergoes cleaning, standardization, geographic normalization, and prescriber deduplication to produce consistent, high-quality records.
+
+Feature engineering then creates derived healthcare metrics—including population-adjusted utilization measures, opioid prescribing rates, provider classifications, cost-per-claim metrics, and risk-adjusted prescribing indicators—that support downstream analysis. The transformed data is organized into purpose-built analytical data marts optimized for state-level reporting, provider-level analysis, and statistical modeling.
+
+Finally, SQL-based statistical analysis generates correlation datasets that quantify relationships among key healthcare utilization measures. These analytical datasets are then published to Tableau, where they power interactive dashboards for geographic analysis, provider performance evaluation, opioid utilization trends, and executive reporting.
+
+## Project Scale
+
+The Medicare Part D ETL pipeline processes more than **1.4 million healthcare records** from multiple Centers for Medicare & Medicaid Services (CMS) source files and transforms them into validated, analytics-ready datasets optimized for business intelligence reporting and statistical analysis.
+
+The pipeline performs large-scale data ingestion, validation, cleaning, standardization, feature engineering, provider deduplication, analytical data mart creation, and SQL-based statistical analysis before publishing the final datasets to Tableau.
+
+### ETL Pipeline Summary
+
+| Dataset | Approximate Records | Output | Primary Purpose |
+|----------|--------------------:|--------|-----------------|
+| Medicare Part D Prescribers | 1,039,307 | `tableau_prescriber_dataset` | Provider-level prescribing analysis |
+| Drug Utilization by State | 115,000+ | `tableau_dataset` | State-level utilization and cost analysis |
+| Opioid Prescribing Trends | 329,000+ | `tableau_dataset` | Longitudinal opioid trend analysis |
+| State Population Reference | 561 | Population-adjusted metrics | Per-capita utilization calculations |
+| Analytical Data Marts | 2 | Reporting datasets | Tableau dashboards |
+| Correlation Datasets | 2 | Statistical datasets | Pearson correlation analysis |
+| Interactive Dashboards | 4 | Tableau workbook | Business intelligence reporting |
+
+### ETL Processing Highlights
+
+During execution, the ETL pipeline performs numerous transformations to improve data quality and analytical consistency, including:
+
+* Bulk ingestion of multiple CMS source files
+* Geographic validation and normalization
+* Removal of invalid geographic records
+* Numeric validation of prescribing metrics
+* Prescriber deduplication using National Provider Identifier (NPI)
+* Provider classification into clinically meaningful groups
+* Population-adjusted utilization calculations
+* Risk-adjusted prescribing metrics
+* Creation of analytics-ready reporting tables
+* SQL-based statistical correlation analysis
+* ETL audit logging for transparency and reproducibility
+
+The resulting analytical datasets provide a consistent foundation for state-level reporting, provider performance analysis, opioid utilization monitoring, and interactive Tableau dashboards.
+
+
 ### ETL Design Principles
 
 The architecture was designed around several core principles commonly used in healthcare analytics and business intelligence environments:
@@ -420,11 +467,11 @@ The completed feature engineering process produced analytics-ready datasets requ
 
 As a result, dashboard development focused entirely on visualization and business interpretation rather than data preparation, closely mirroring production business intelligence workflows used in healthcare organizations.
 
-## SQL Implementation Highlights
+## Representative SQL Techniques
 
 The complete SQL ETL pipeline that powers this project is available here:
 
-➡️ Medicare_Part_D_ETL.sql
+➡️ **[Medicare_Part_D_ETL.sql](https://github.com/puhan63/Medicare/blob/main/Medicare_Part_D_ETL.sql)**
 
 The pipeline consists of several thousand lines of SQL implementing bulk data ingestion, validation, cleaning, standardization, feature engineering, analytical data mart creation, statistical analysis, and ETL audit logging.
 
@@ -531,7 +578,9 @@ NULLIF(
 AS corr_claims_cost
 ```
 
-Using SQL for statistical calculations keeps the analytical workflow entirely within the database environment while ensuring the results remain reproducible and transparent.
+Using SQL for statistical calculations keeps the analytical workflow entirely within the database environment while ensuring that statistical results are generated directly from validated analytical datasets.
+
+By integrating statistical calculations directly into the ETL pipeline, quantitative analyses remain reproducible, transparent, and tightly coupled with the validated source data.
 
 ### Statistical Output Datasets
 
@@ -605,6 +654,8 @@ Beyond the examples shown above, the ETL pipeline incorporates a variety of SQL 
 * Feature engineering for business intelligence reporting
 * Analytical data mart creation optimized for Tableau
 * ETL audit logging for transformation tracking and reproducibility
+
+These examples represent only a small portion of the ETL pipeline. The complete project also includes extensive data validation, cleaning and standardization, feature engineering, analytical data mart creation, ETL audit logging, performance optimization, and statistical analysis spanning several thousand lines of SQL.
 
 ## Tableau Dashboard Design
 
@@ -769,6 +820,8 @@ The final Tableau dashboards connect directly to the analytical data marts gener
 
 Because validation, cleaning, feature engineering, and statistical calculations are completed during ETL, Tableau functions primarily as a visualization layer rather than a data transformation tool.
 
+**Whenever possible, computationally expensive calculations were performed once during ETL rather than repeatedly during dashboard execution, reducing processing overhead and improving dashboard responsiveness.**
+
 This design provides:
 
 * Faster dashboard loading
@@ -856,4 +909,8 @@ Following these practices results in a workflow that is easier to audit, extend,
 
 ## Summary
 
-The completed ETL pipeline transforms more than 1.4 million Medicare Part D records into validated, standardized, and analytics-ready datasets that support interactive Tableau dashboards and SQL-based statistical analysis. By emphasizing data quality, reproducibility, auditability, and modular ETL design, the project demonstrates the end-to-end workflow commonly used to prepare large-scale healthcare data for business intelligence and decision support.
+The completed ETL pipeline transforms more than 1.4 million Medicare Part D records into validated, standardized, analytics-ready datasets that support interactive Tableau dashboards and SQL-based statistical analysis.
+
+The project demonstrates an end-to-end healthcare analytics workflow encompassing large-scale data ingestion, data quality validation, cleaning and standardization, feature engineering, analytical modeling, business intelligence reporting, and reproducible ETL design.
+
+Together, these components reflect the data engineering and analytical processes commonly used in production healthcare business intelligence environments.
