@@ -1,27 +1,26 @@
 # Technical Design
 
-This document describes the technical design and implementation of the Medicare Part D Prescription & Opioid Utilization Analytics project. It explains how the SQL ETL pipeline ingests raw CMS datasets, validates and transforms the data, engineers analytical features, produces Tableau-ready reporting tables, and performs statistical analysis directly within MySQL.
+It explains how the SQL ETL pipeline ingests Medicare Part D source files, validates and transforms the data, engineers analytical features, produces Tableau-ready reporting tables, and performs statistical analysis directly within MySQL.
 
-The project processes more than 1.4 million CMS Medicare Part D records spanning 2013–2023 and demonstrates a production-style healthcare analytics workflow built entirely in MySQL Workbench 8.0. The pipeline transforms raw CMS datasets into validated, analytics-ready datasets that support interactive business intelligence dashboards and statistical analyses.
+The project processes more than 1.4 million CMS Medicare Part D records spanning 2013–2023 and demonstrates a production-style healthcare analytics workflow built entirely in MySQL Workbench 8.0. The pipeline converts raw CMS datasets into validated analytical datasets that support interactive business intelligence dashboards and statistical analyses.
 
 The sections below describe the architecture, implementation decisions, SQL techniques, governance, and reporting design used throughout the project.
 
 ## Table of Contents
 
 1. [Project Architecture](#project-architecture)
-2. [Project Scale](#project-scale)
-3. [ETL Pipeline Design](#etl-pipeline-design)
-4. [Data Ingestion](#data-ingestion)
+2. [Data Flow](#data-flow)
+3. [Project Scale](#project-scale)
+4. [ETL Pipeline Design](#etl-pipeline-design)
 5. [Data Validation Framework](#data-validation-framework)
 6. [Data Cleaning & Standardization](#data-cleaning--standardization)
-7. [Prescriber Deduplication](#prescriber-deduplication)
-8. [Feature Engineering](#feature-engineering)
-9. [SQL Implementation Highlights](#sql-implementation-highlights)
-10. [Statistical Analysis](#statistical-analysis)
-11. [Final Analytical Datasets](#final-analytical-datasets)
-12. [Tableau Dashboard Design](#tableau-dashboard-design)
-13. [ETL Governance & Auditability](#etl-governance--auditability)
-14. [Performance Considerations](#performance-considerations)
+7. [Feature Engineering](#feature-engineering)
+8. [Representative SQL Techniques](#representative-sql-techniques)
+9. [Statistical Analysis](#statistical-analysis)
+10. [Tableau Dashboard Design](#tableau-dashboard-design)
+11. [Performance Considerations](#performance-considerations)
+12. [ETL Governance & Auditability](#etl-governance--auditability)
+13. [Summary](#summary)
 
 ## Project Architecture
 
@@ -81,9 +80,9 @@ Finally, SQL-based statistical analysis generates correlation datasets that quan
 
 ## Project Scale
 
-The Medicare Part D ETL pipeline processes more than **1.4 million healthcare records** from multiple Centers for Medicare & Medicaid Services (CMS) source files and transforms them into validated, analytics-ready datasets optimized for business intelligence reporting and statistical analysis.
+The Medicare Part D ETL pipeline processes more than **1.4 million healthcare records** from multiple Centers for Medicare & Medicaid Services (CMS) source files and prepares them for business intelligence reporting by producing validated analytical datasets optimized for Tableau and statistical analysis.
 
-The pipeline performs large-scale data ingestion, validation, cleaning, standardization, feature engineering, provider deduplication, analytical data mart creation, and SQL-based statistical analysis before publishing the final datasets to Tableau.
+The pipeline includes large-scale data ingestion, validation, cleaning, standardization, feature engineering, provider deduplication, analytical data mart creation, and SQL-based statistical analysis before publishing the final datasets to Tableau.
 
 ### ETL Pipeline Summary
 
@@ -123,10 +122,10 @@ The architecture was designed around several core principles commonly used in he
 - **Modular processing** — Each ETL stage performs a specific responsibility, making the pipeline easier to maintain, troubleshoot, and extend.
 - **Data quality first** — Validation occurs before analytical datasets are created to ensure reporting is based on accurate, standardized, and reproducible data.
 - **Auditability** — Major transformations, rejected records, and validation outcomes are preserved to support transparency and reproducibility.
-- **Analytics-ready outputs** — Final datasets are fully cleaned, standardized, and feature engineered before being consumed by Tableau, eliminating the need for additional transformations within the reporting layer.
+- **Analytics-ready outputs** — Final datasets are fully cleaned, standardized, and enriched with derived analytical features before being consumed by Tableau.
 - **Scalable design** — The workflow processes more than 1.4 million Medicare Part D records while maintaining a structure that can be expanded to incorporate additional CMS datasets and future analytical requirements.
 
-The ETL pipeline ultimately produces four analytics-ready datasets that support interactive Tableau dashboards for state-level prescription trends, provider performance, opioid utilization, and SQL-based statistical correlation analysis.
+The ETL pipeline ultimately produces four Tableau-ready analytical datasets that support state-level reporting, provider-level analysis, and statistical visualization.
 
 ## ETL Pipeline Design
 
@@ -189,7 +188,7 @@ Subsequent sections describe the specific validation framework, SQL implementati
 
 Before records entered the final analytical datasets, the ETL pipeline applied a comprehensive validation framework to ensure that reporting and statistical analyses were based on accurate, consistent, and reliable data. Rather than silently removing questionable records, validation rules were designed to preserve auditability by documenting rejected records and maintaining reproducible transformation logic.
 
-Validation occurred after raw data ingestion and before feature engineering, allowing downstream analytical datasets to be built exclusively from standardized and validated data.
+Validation occurred after raw data ingestion and before feature engineering, allowing downstream analytical datasets to be built exclusively from validated, standardized data.
 
 ### Geographic Validation
 
@@ -326,7 +325,7 @@ These engineered measures enable meaningful comparisons independent of state pop
 
 ## Feature Engineering
 
-Once the source data had been validated, cleaned, standardized, and deduplicated, the ETL pipeline generated a series of derived variables to support business intelligence reporting and statistical analysis. These engineered features transformed raw CMS data into metrics that were immediately usable for dashboarding and healthcare decision-making without requiring additional calculations in Tableau.
+Once the source data had been validated, cleaned, standardized, and deduplicated, the ETL pipeline generated a series of derived variables to support business intelligence reporting and statistical analysis. These engineered features converted raw CMS data into metrics that were immediately usable for dashboarding and healthcare decision-making without requiring additional calculations in Tableau.
 
 The feature engineering layer focused on creating standardized measures that improve comparability across providers, states, and years while simplifying downstream analysis.
 
@@ -394,7 +393,7 @@ These measures form the foundation of the Tableau dashboards and SQL-based stati
 
 Several engineered variables were created specifically for statistical analysis of prescribing behavior.
 
-These features support Pearson correlation calculations examining relationships between:
+These engineered variables were used to calculate Pearson correlation coefficients examining relationships between:
 
 * Prescription volume and total drug cost
 * Prescription volume and provider supply
@@ -406,7 +405,7 @@ The resulting statistical datasets provide quantitative evidence supporting the 
 
 ### Business Intelligence Readiness
 
-The completed feature engineering process produced analytics-ready datasets requiring no additional calculations or transformations within Tableau.
+The feature engineering process produced analytical datasets that require no additional calculations or transformations within Tableau.
 
 As a result, dashboard development focused entirely on visualization and business interpretation rather than data preparation, closely mirroring production business intelligence workflows used in healthcare organizations.
 
@@ -416,7 +415,7 @@ The complete SQL ETL pipeline that powers this project is available here:
 
 ➡️ **[Medicare_Part_D_ETL.sql](https://github.com/puhan63/Medicare/blob/main/Medicare_Part_D_ETL.sql)**
 
-The pipeline consists of several thousand lines of SQL implementing bulk data ingestion, validation, cleaning, standardization, feature engineering, analytical data mart creation, statistical analysis, and ETL audit logging.
+The ETL pipeline contains several thousand lines of SQL covering bulk data ingestion, validation, cleaning, standardization, feature engineering, analytical data mart creation, statistical analysis, and ETL audit logging.
 
 The examples below highlight several representative SQL techniques used throughout the project.
 
@@ -462,7 +461,7 @@ Using NULLIF() prevents division-by-zero errors while generating standardized pe
 
 ## Statistical Analysis
 
-Beyond data engineering and business intelligence reporting, this project performs statistical analysis directly within MySQL to quantify relationships among key Medicare Part D utilization metrics.
+In addition to supporting data engineering and business intelligence reporting, this project performs statistical analysis directly within MySQL to quantify relationships among key Medicare Part D utilization metrics.
 
 Rather than relying solely on visual interpretation of dashboard trends, the ETL pipeline calculates Pearson correlation coefficients using SQL aggregate functions. These statistical measures provide quantitative evidence supporting the relationships observed throughout the analysis.
 
@@ -598,7 +597,7 @@ Beyond the examples shown above, the ETL pipeline incorporates a variety of SQL 
 * Analytical data mart creation optimized for Tableau
 * ETL audit logging for transformation tracking and reproducibility
 
-These examples represent only a small portion of the ETL pipeline. The complete project also includes extensive data validation, cleaning and standardization, feature engineering, analytical data mart creation, ETL audit logging, performance optimization, and statistical analysis spanning several thousand lines of SQL.
+These examples represent only a small portion of the ETL pipeline. The complete project also includes extensive validation logic, data cleansing, feature engineering, analytical data mart creation, ETL audit logging, performance optimization, and statistical analysis.
 
 ## Tableau Dashboard Design
 
@@ -777,7 +776,7 @@ Separating data engineering from visualization reflects best practices commonly 
 
 ## ETL Governance & Auditability
 
-A key objective of this project was to build an ETL pipeline that is not only accurate, but also transparent, reproducible, and easy to validate. Rather than treating data cleaning as a black box, the pipeline documents each major transformation and preserves sufficient information to understand how the raw CMS source data evolves into analytics-ready datasets.
+A key objective of this project was to build an ETL pipeline that is not only accurate, but also transparent, reproducible, and easy to validate. Rather than treating data cleaning as a black box, the pipeline documents each major transformation and preserves sufficient information to understand how the raw CMS source data evolves into analytical reporting datasets.
 
 ### Data Quality Transparency
 
@@ -852,7 +851,7 @@ Following these practices results in a workflow that is easier to audit, extend,
 
 ## Summary
 
-The completed ETL pipeline transforms more than 1.4 million Medicare Part D records into validated, standardized, analytics-ready datasets that support interactive Tableau dashboards and SQL-based statistical analysis.
+The completed ETL pipeline processes more than 1.4 million Medicare Part D records and produces validated, standardized datasets for Tableau reporting and SQL-based statistical analysis.
 
 The project demonstrates an end-to-end healthcare analytics workflow encompassing large-scale data ingestion, data quality validation, cleaning and standardization, feature engineering, analytical modeling, business intelligence reporting, and reproducible ETL design.
 
