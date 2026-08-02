@@ -436,6 +436,7 @@ CMS source files occasionally contained multiple records for the same National P
 
 Representative SQL:
 
+```sql
 CREATE TABLE prescriber_clean AS
 SELECT r.*
 FROM raw_prescriber r
@@ -448,7 +449,7 @@ JOIN (
 ) m
 ON r.npi = m.npi
 AND r.total_claims = m.max_claims;
-
+```
 This approach creates a single representative provider profile while preserving the highest-volume prescribing record for downstream analysis.
 
 ### Population-Normalized Healthcare Metrics
@@ -457,6 +458,7 @@ Raw prescription counts can be misleading because states differ substantially in
 
 Representative SQL:
 
+```sql
 CAST(o.opioid_claims AS DECIMAL(18,4))
     / NULLIF(p.population, 0) * 1000
     AS opioid_claims_per_1000,
@@ -464,6 +466,7 @@ CAST(o.opioid_claims AS DECIMAL(18,4))
 CAST(o.total_prescribers AS DECIMAL(18,4))
     / NULLIF(p.population, 0) * 1000
     AS prescribers_per_1000
+```
 
 Using NULLIF() prevents division-by-zero errors while generating standardized per-capita healthcare metrics that can be compared fairly across all states.
 
@@ -517,6 +520,7 @@ Rather than exporting data to statistical software, correlation coefficients wer
 
 Representative SQL:
 
+```sql
 (AVG(total_claims * total_drug_cost)
  - AVG(total_claims) * AVG(total_drug_cost))
 /
@@ -525,6 +529,7 @@ NULLIF(
     * STDDEV(total_drug_cost),
 0)
 AS corr_claims_cost
+```
 
 Using SQL for statistical calculations keeps the analytical workflow entirely within the database environment while ensuring the results remain reproducible and transparent.
 
@@ -691,3 +696,164 @@ Key design principles include:
 * Dashboard layouts optimized for rapid interpretation of healthcare utilization patterns
 
 Because all business rules, feature engineering, and statistical calculations are performed within the SQL ETL pipeline, the Tableau workbook functions primarily as a visualization layer without requiring additional data preparation.
+
+## Performance Considerations
+
+Although this project was developed using publicly available Medicare Part D data, the ETL pipeline was designed using practices commonly employed in production data engineering workflows. Performance considerations focused on reducing unnecessary processing, supporting efficient analytical queries, and preparing datasets optimized for business intelligence reporting.
+
+### ETL Design
+
+The ETL pipeline follows a staged architecture in which data is transformed incrementally rather than through a single monolithic query.
+
+Major processing stages include:
+
+* Bulk ingestion of raw CMS source files into staging tables
+* Data validation and quality checks
+* Cleaning and standardization
+* Prescriber deduplication
+* Feature engineering
+* Statistical analysis
+* Creation of analytics-ready data marts
+
+Separating these stages simplifies debugging, improves maintainability, and allows intermediate results to be validated before progressing to downstream transformations.
+
+### Bulk Data Loading
+
+Large CMS source files were imported using LOAD DATA LOCAL INFILE, which provides significantly faster performance than row-by-row insert operations.
+
+Bulk loading enables efficient ingestion of more than 1.4 million Medicare Part D records while preserving the original source data for reproducibility.
+
+### Analytical Data Marts
+
+Rather than querying multiple raw source tables for every analysis, the ETL pipeline produces denormalized analytical data marts specifically designed for reporting.
+
+These curated datasets:
+
+* Minimize complex joins during reporting
+* Reduce repeated calculations
+* Improve dashboard responsiveness
+* Simplify SQL queries used for business intelligence
+
+This approach mirrors common data warehouse practices where reporting tables are optimized for analytical workloads rather than transactional processing.
+
+### Statistical Processing
+
+Pearson correlation coefficients were calculated after the analytical datasets had been fully validated and standardized.
+
+Performing statistical analysis on curated datasets provides several advantages:
+
+* Eliminates unnecessary processing of invalid records
+* Ensures consistent analytical inputs
+* Produces reproducible statistical results
+* Separates data engineering from analytical processing
+
+This staged approach improves both maintainability and computational efficiency.
+
+### Database Optimization
+
+The ETL pipeline incorporates several SQL design practices intended to support efficient execution and reporting.
+
+Examples include:
+
+* Targeted indexing on frequently queried columns
+* Aggregate calculations performed within SQL
+* Population-normalized metrics calculated during ETL rather than at visualization time
+* Deduplication performed once during transformation instead of repeatedly during analysis
+* Reusable analytical datasets designed for downstream reporting
+
+These techniques reduce redundant computation and simplify dashboard queries.
+
+### Business Intelligence Performance
+
+The final Tableau dashboards connect directly to the analytical data marts generated by the ETL pipeline.
+
+Because validation, cleaning, feature engineering, and statistical calculations are completed during ETL, Tableau functions primarily as a visualization layer rather than a data transformation tool.
+
+This design provides:
+
+* Faster dashboard loading
+* Simpler calculated fields
+* Consistent business logic across visualizations
+* Improved maintainability
+* Reproducible analytical results
+
+Separating data engineering from visualization reflects best practices commonly used in healthcare business intelligence environments.
+
+## ETL Governance & Auditability
+
+A key objective of this project was to build an ETL pipeline that is not only accurate, but also transparent, reproducible, and easy to validate. Rather than treating data cleaning as a black box, the pipeline documents each major transformation and preserves sufficient information to understand how the raw CMS source data evolves into analytics-ready datasets.
+
+### Data Quality Transparency
+
+Validation rules were applied consistently throughout the ETL process to identify incomplete, inconsistent, or invalid records before they entered the analytical data marts.
+
+Examples include:
+
+* Geographic validation
+* Provider deduplication
+* Opioid prescribing rate validation
+* State and FIPS code standardization
+* Cross-dataset consistency checks
+
+Each validation stage was designed to improve analytical reliability while preserving a clear understanding of why records were modified or excluded.
+
+### ETL Audit Logging
+
+The pipeline includes an ETL audit logging process to document major transformations performed during data preparation.
+
+Examples of tracked activities include:
+
+* Records removed during geographic validation
+* Prescriber deduplication outcomes
+* Numeric validation and correction of opioid prescribing rates
+* Data cleaning and standardization operations
+* Creation of analytical data marts
+
+Maintaining an audit trail improves transparency and provides a reproducible record of how the final analytical datasets were produced.
+
+### Reproducibility
+
+The ETL pipeline was designed to produce consistent results each time it is executed against the same CMS source files.
+
+Reproducibility is supported through:
+
+* Standardized SQL transformation logic
+* Deterministic validation rules
+* Repeatable feature engineering processes
+* Consistent analytical dataset creation
+* Version-controlled SQL scripts
+
+This approach ensures that analyses and dashboards can be regenerated without requiring manual intervention or undocumented processing steps.
+
+### Separation of Responsibilities
+
+The project separates each stage of the analytics workflow into distinct responsibilities.
+
+* Raw CMS data ingestion
+* Data validation
+* Cleaning and standardization
+* Feature engineering
+* Statistical analysis
+* Analytical data mart creation
+* Tableau visualization
+
+Separating these responsibilities improves maintainability, simplifies debugging, and ensures that business intelligence reporting is built upon validated and consistent data.
+
+### Healthcare Analytics Best Practices
+
+The ETL design reflects principles commonly used in healthcare analytics and business intelligence projects.
+
+These include:
+
+* Preserving raw source data
+* Applying reproducible validation rules
+* Standardizing data before analysis
+* Maintaining transparent transformation logic
+* Separating data engineering from visualization
+* Building analytics-ready data marts optimized for reporting
+
+Following these practices results in a workflow that is easier to audit, extend, and maintain while producing reliable datasets for downstream analysis.
+
+## Summary
+
+The completed ETL pipeline transforms more than 1.4 million Medicare Part D records into validated, standardized, and analytics-ready datasets that support interactive Tableau dashboards and SQL-based statistical analysis. By emphasizing data quality, reproducibility, auditability, and modular ETL design, the project demonstrates the end-to-end workflow commonly used to prepare large-scale healthcare data for business intelligence and decision support.
