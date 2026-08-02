@@ -2,7 +2,9 @@
 
 It explains how the SQL ETL pipeline ingests Medicare Part D source files, validates and transforms the data, engineers analytical features, produces Tableau-ready reporting tables, and performs statistical analysis directly within MySQL.
 
-The project processes more than 1.4 million CMS Medicare Part D records spanning 2013–2023 and demonstrates a production-style healthcare analytics workflow built entirely in MySQL Workbench 8.0. The pipeline converts raw CMS datasets into validated analytical datasets that support interactive business intelligence dashboards and statistical analyses.
+The project processes more than 1.4 million Medicare Part D records published by the Centers for Medicare & Medicaid Services (CMS), spanning 2013–2023 and demonstrates a production-style healthcare analytics workflow built entirely in MySQL Workbench 8.0. The pipeline converts raw CMS datasets into validated analytical datasets that support interactive business intelligence dashboards and statistical analyses.
+
+The completed dashboards are published on **[Tableau Public](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/PharmacyUtilizationCostAnalysis)**.
 
 The sections below describe the architecture, implementation decisions, SQL techniques, governance, and reporting design used throughout the project.
 
@@ -20,7 +22,9 @@ The sections below describe the architecture, implementation decisions, SQL tech
 10. [Tableau Dashboard Design](#tableau-dashboard-design)
 11. [Performance Considerations](#performance-considerations)
 12. [ETL Governance & Auditability](#etl-governance--auditability)
-13. [Summary](#summary)
+13. [Limitations](#limitations)
+14. [Related Project Resources](#related-project-resources)
+15. [Summary](#summary)
 
 ## Project Architecture
 
@@ -411,7 +415,9 @@ As a result, dashboard development focused entirely on visualization and busines
 
 ## Representative SQL Techniques
 
-The complete SQL ETL pipeline that powers this project is available here:
+The representative examples below illustrate only a small portion of the ETL pipeline.
+
+For the complete implementation, see:
 
 ➡️ **[Medicare_Part_D_ETL.sql](https://github.com/puhan63/Medicare/blob/main/Medicare_Part_D_ETL.sql)**
 
@@ -554,14 +560,12 @@ These datasets are consumed directly by Tableau to visualize the strength of rel
 
 ### Interpretation
 
-The statistical analysis supports several of the project's primary findings.
+The calculated correlation coefficients provide quantitative context for patterns observed throughout the dashboards. For example, the analysis can be used to examine relationships such as:
 
-Examples include:
-
-* Higher prescription volume is strongly associated with increased drug spending.
-* Opioid prescribing generally scales with overall prescribing activity rather than occurring independently.
-* Provider availability contributes to differences in healthcare utilization across geographic regions.
-* Beneficiary volume is positively associated with prescription activity.
+* The association between prescription volume and total drug cost
+* Whether opioid prescribing scales with overall prescribing activity
+* How provider availability relates to healthcare utilization across states
+* The relationship between beneficiary volume and prescribing activity
 
 These findings complement the dashboard visualizations by providing quantitative evidence for observed utilization patterns.
 
@@ -689,6 +693,8 @@ Key design principles include:
 * Dashboard layouts optimized for rapid interpretation of healthcare utilization patterns
 
 Because all business rules, feature engineering, and statistical calculations are performed within the SQL ETL pipeline, the Tableau workbook functions primarily as a visualization layer without requiring additional data preparation.
+
+The interactive dashboard can be explored on **[Tableau Public](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/PharmacyUtilizationCostAnalysis)**.
 
 ## Performance Considerations
 
@@ -849,10 +855,22 @@ These include:
 
 Following these practices results in a workflow that is easier to audit, extend, and maintain while producing reliable datasets for downstream analysis.
 
+## Limitations
+
+This project demonstrates healthcare data engineering, SQL-based statistical analysis, and business intelligence reporting using publicly available CMS Medicare Part D datasets. While the analyses identify statistical relationships among healthcare utilization measures, they are intended to illustrate analytical techniques rather than establish causal clinical conclusions.
+
+The correlation analyses quantify associations between variables but should not be interpreted as evidence of causation. Healthcare utilization is influenced by many additional demographic, socioeconomic, and clinical factors that are beyond the scope of this project.
+
+## Related Project Resources
+
+- **Project Overview:** [README.md](README.md)
+- **Complete SQL ETL Pipeline:** [Medicare_Part_D_ETL.sql](Medicare_Part_D_ETL.sql)
+- **Interactive Tableau Dashboard:** [View on Tableau Public](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/PharmacyUtilizationCostAnalysis)
+
 ## Summary
 
 The completed ETL pipeline processes more than 1.4 million Medicare Part D records and produces validated, standardized datasets for Tableau reporting and SQL-based statistical analysis.
 
 The project demonstrates an end-to-end healthcare analytics workflow encompassing large-scale data ingestion, data quality validation, cleaning and standardization, feature engineering, analytical modeling, business intelligence reporting, and reproducible ETL design.
 
-Together, these components reflect the data engineering and analytical processes commonly used in production healthcare business intelligence environments.
+Together, these components demonstrate an end-to-end healthcare analytics workflow that mirrors the data engineering, analytical modeling, and business intelligence practices commonly used in production healthcare environments.
