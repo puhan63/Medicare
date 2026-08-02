@@ -1,6 +1,6 @@
 # Technical Design
 
-This document provides detailed technical documentation for the Medicare Part D Prescription & Opioid Utilization Analytics project. It describes the design and implementation of the SQL ETL pipeline, including data ingestion, validation, cleaning, feature engineering, analytical data mart creation, statistical analysis, and Tableau dashboard development.
+This document describes the technical design and implementation of the Medicare Part D Prescription & Opioid Utilization Analytics project. It explains how the SQL ETL pipeline ingests raw CMS datasets, validates and transforms the data, engineers analytical features, produces Tableau-ready reporting tables, and performs statistical analysis directly within MySQL.
 
 The project processes more than 1.4 million CMS Medicare Part D records spanning 2013–2023 and demonstrates a production-style healthcare analytics workflow built entirely in MySQL Workbench 8.0. The pipeline transforms raw CMS datasets into validated, analytics-ready datasets that support interactive business intelligence dashboards and statistical analyses.
 
@@ -252,63 +252,6 @@ Cross-dataset validation included:
 | Cross-dataset validation | Ensure consistent analytical inputs | Completed |
 
 The validated datasets produced by this framework became the foundation for feature engineering, SQL-based statistical analysis, and the final Tableau-ready analytical datasets.
-
-## Data Validation Framework
-
-Before any transformations were applied, the ETL pipeline validated each source dataset to ensure that only reliable records progressed into the analytical layer. Validation rules were designed to identify inconsistent, incomplete, and invalid healthcare data while preserving auditability throughout the ETL process.
-
-### Validation Rules
-
-#### Geographic Validation
-
-The pipeline validated geographic information across all CMS datasets by:
-
-* Removing non-U.S. territories and military address codes (PR, VI, GU, AE, AP, AA, etc.)
-* Verifying valid U.S. state abbreviations
-* Confirming FIPS code consistency
-* Separating rejected records for audit and quality review
-
-#### Result
-
-* 9,268 invalid geographic records removed before analytical processing
-
-#### Provider Validation
-
-Provider records were validated to ensure a single, reliable profile for each prescriber.
-
-Validation included:
-
-* National Provider Identifier (NPI) verification
-* Duplicate provider detection
-* Validation of specialty information
-* Cross-checking provider identifiers across datasets
-
-#### Numeric Validation
-
-Numeric healthcare measures were validated before analysis.
-
-Validation included:
-
-* Opioid prescribing rates constrained to the expected 0–1 range
-* Population values checked before rate calculations
-* Division-by-zero prevention using NULLIF()
-* Invalid numeric values converted to NULL instead of removing entire records
-
-Result
-
-* More than 312,000 invalid opioid rate values corrected while preserving record integrity
-
-#### Cross-Dataset Validation
-
-Relationships between datasets were verified to ensure consistent reporting.
-
-Validation included:
-
-* Matching state abbreviations across datasets
-* Verifying FIPS mappings
-* Confirming geographic alignment between prescriber, utilization, and opioid datasets
-
-Only records passing validation were promoted to the transformation layer.
 
 ## Data Cleaning & Standardization
 
